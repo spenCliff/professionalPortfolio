@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aero Optimisation Pipeline — Spencer Clifford</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav">
+    <a class="brand" href="../index.html">S. CLIFFORD</a>
+    <ul>
+      <li><a class="navlink" href="../index.html#projects">Projects</a></li>
+      <li><a class="navlink" href="../index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="project-hero">
+  <div class="wrap">
+    <a class="back-link" href="../index.html">← All projects</a>
+    <h1>Aero Optimisation Pipeline</h1>
+    <div class="tags">
+      <span class="tag">Simulation</span>
+      <span class="tag">CFD</span>
+      <span class="tag">Bayesian Optimisation</span>
+      <span class="tag">Python</span>
+      <span class="tag">HPC</span>
+    </div>
+    <p class="lede">An automated pipeline that links parametric CAD, CFD, and Bayesian optimisation to explore a solar racecar's aero design space — 221 simulations run without touching a single one by hand.</p>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Overview</h2>
+    <div class="body">
+      <p>[Add more context here if you'd like — e.g. what EKKO Solar Racing is, what the vehicle is built for, and what "mission energy" means for a solar car, for readers who aren't familiar.]</p>
+      <p>Solar racecar aero is a strange optimisation problem: you're not just chasing low drag, you're balancing it against solar panel area and the vehicle's pitch, since both affect how much energy the car actually has to spend and generate over a race. Running that trade-off by hand — tweak geometry, mesh, solve, wait, repeat — doesn't scale. This project was about building a pipeline that could explore that space on its own.</p>
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>What I Did</h2>
+    <div class="body">
+      <p>The pipeline runs end to end without manual intervention: regenerate the CAD for a given design, mesh and solve it in CFD, pull out the results, and feed them back into an optimiser that picks the next design to try.</p>
+      <ul>
+        <li>Set up a STAR-CCM+ simulation with a moving ground plane and rotating wheels, plus near-wall mesh control to properly resolve boundary layer behaviour.</li>
+        <li>Verified the setup with mesh and domain convergence studies, and benchmarked turbulence models against wind-tunnel correlation data to trust the baseline before optimising anything.</li>
+        <li>Built an automated Python pipeline: parametric CAD regeneration, HPC job submission over SSH/SCP, CFD meshing/solving/post-processing, and a database to track every trial.</li>
+        <li>Applied pitch-constrained Bayesian optimisation to minimise a mission-energy objective, combining CFD drag output with solar-area data.</li>
+        <li>Let it run — 221 simulations later, daily energy losses were down 37.6%.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Tools &amp; Methods</h2>
+    <div class="tool-list">
+      <span class="tag">STAR-CCM+</span>
+      <span class="tag">Python</span>
+      <span class="tag">SLURM / HPC</span>
+      <span class="tag">SSH &amp; SCP automation</span>
+      <span class="tag">Bayesian optimisation</span>
+      <span class="tag">Parametric CAD</span>
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Gallery</h2>
+    <!--
+      Replace each placeholder below with, for example:
+      <img src="../images/pipeline-cad.jpg" alt="Parametric CAD sweep of the vehicle body">
+    -->
+    <div class="gallery">
+      <div class="img-placeholder">
+        <span class="label">images/pipeline-cad.jpg</span>
+        <span class="hint">e.g. parametric CAD sweep or geometry variations</span>
+      </div>
+      <div class="img-placeholder">
+        <span class="label">images/pipeline-convergence.jpg</span>
+        <span class="hint">e.g. mesh/domain convergence plot</span>
+      </div>
+      <div class="img-placeholder">
+        <span class="label">images/pipeline-flowfield.jpg</span>
+        <span class="hint">e.g. CFD flow field or pressure contour</span>
+      </div>
+      <div class="img-placeholder">
+        <span class="label">images/pipeline-results.jpg</span>
+        <span class="hint">e.g. optimisation convergence / results plot</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Results &amp; Reflections</h2>
+    <div class="body">
+      <p>The headline number is a 37.6% reduction in daily energy losses across 221 simulations — but the more useful outcome was the pipeline itself. [Add your own reflections here: what surprised you, what you'd change about the setup, anything you learned about Bayesian optimisation or HPC automation that's worth sharing.]</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site" id="contact">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="copyline">Southampton, UK</div>
+      <div class="footer-links">
+        <a href="mailto:spencercliff@outlook.com">Email</a>
+        <a href="https://www.linkedin.com/in/spencer-clifford-a9a037270" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

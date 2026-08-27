@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spencer Clifford - Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!--
+  HOW TO ADD A NEW PROJECT
+  1. Copy /project-template.html into /projects/ and rename it (e.g. projects/my-new-project.html).
+  2. Fill in the bracketed placeholders in that file.
+  3. Copy one <a class="project-card">...</a> block below, edit the title/tags/summary,
+     point the href at your new file, and set the thumbnail label.
+-->
+
+<header class="site">
+  <nav class="nav">
+    <a class="brand" href="index.html">Engineering Portfolio</a>
+    <ul>
+      <li><a class="navlink" href="#projects">Projects</a></li>
+      <li><a class="navlink" href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Projects</div>
+    <h1>Spencer Clifford</h1>
+    <p class="lede">A collection of engineering work I've found interesting enough to build properly and write up.</p>
+  </div>
+</section>
+
+<section class="grid-section" id="projects">
+
+  <div class="carousel-track" id="carouselTrack">
+
+      <a class="project-card" href="projects/optimisation-pipeline.html">
+        <div class="card-thumb"><span>image placeholder</span></div>
+        <div class="card-body">
+          <div class="tags">
+            <span class="tag">Simulation</span>
+            <span class="tag">Optimisation</span>
+            <span class="tag">Python</span>
+          </div>
+          <h3>Aero Optimisation Pipeline</h3>
+          <p>An automated pipeline linking CAD, CFD, and Bayesian optimisation to explore a solar racecar's aero design space without babysitting every run.</p>
+        </div>
+      </a>
+
+      <a class="project-card" href="projects/fsi-simulation.html">
+        <div class="card-thumb"><span>image placeholder</span></div>
+        <div class="card-body">
+          <div class="tags">
+            <span class="tag">Simulation</span>
+            <span class="tag">FSI</span>
+          </div>
+          <h3>Fluid–Structure Interaction Simulation</h3>
+          <p>Setting up a coupled fluid–structure interaction simulation — currently in progress.</p>
+          <span class="card-status">In progress</span>
+        </div>
+      </a>
+
+            <a class="project-card" href="projects/sufst-optimisation.html">
+        <div class="card-thumb"><span>image placeholder</span></div>
+        <div class="card-body">
+          <div class="tags">
+            <span class="tag">Simulation</span>
+            <span class="tag">Optimisation</span>
+            <span class="tag">Python</span>
+            <span class="tag">Formula Student</span>
+          </div>
+          <h3>Formula student Optimisation</h3>
+          <p>Progressing my optimisation pipeline to create a generalised tool for our Formula Student team.</p>
+          <span class="card-status">In progress</span>
+        </div>
+      </a>
+
+  </div>
+
+  <div class="wrap">
+    <div class="carousel-controls">
+      <button class="carousel-btn prev" type="button" aria-label="Previous project">‹</button>
+      <div class="carousel-dots" id="carouselDots"></div>
+      <button class="carousel-btn next" type="button" aria-label="Next project">›</button>
+    </div>
+  </div>
+</section>
+
+<footer class="site" id="contact">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="copyline">Southampton, UK</div>
+      <div class="footer-links">
+        <a href="mailto:spencercliff@outlook.com">Email</a>
+        <a href="https://www.linkedin.com/in/spencer-clifford-a9a037270" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const track = document.getElementById('carouselTrack');
+  if(!track) return;
+  const cards = Array.from(track.children);
+  const prevBtn = document.querySelector('.carousel-btn.prev');
+  const nextBtn = document.querySelector('.carousel-btn.next');
+  const dotsWrap = document.getElementById('carouselDots');
+
+  cards.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'dot';
+    dot.setAttribute('aria-label', 'Go to project ' + (i + 1));
+    dot.addEventListener('click', () => scrollToCard(i));
+    dotsWrap.appendChild(dot);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function scrollToCard(i){
+    track.scrollTo({ left: cards[i].offsetLeft - track.offsetLeft, behavior: 'smooth' });
+  }
+
+  function currentIndex(){
+    let closest = 0, closestDist = Infinity;
+    cards.forEach((card, i) => {
+      const dist = Math.abs((card.offsetLeft - track.offsetLeft) - track.scrollLeft);
+      if(dist < closestDist){ closestDist = dist; closest = i; }
+    });
+    return closest;
+  }
+
+  function updateUI(){
+    const i = currentIndex();
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+    if(prevBtn) prevBtn.disabled = i === 0;
+    if(nextBtn) nextBtn.disabled = i === cards.length - 1;
+  }
+
+  let raf;
+  track.addEventListener('scroll', () => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(updateUI);
+  });
+
+  if(prevBtn) prevBtn.addEventListener('click', () => scrollToCard(Math.max(0, currentIndex() - 1)));
+  if(nextBtn) nextBtn.addEventListener('click', () => scrollToCard(Math.min(cards.length - 1, currentIndex() + 1)));
+
+  updateUI();
+})();
+</script>
+</body>
+</html>
