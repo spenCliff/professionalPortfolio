@@ -60,13 +60,48 @@
 <section class="detail-section">
   <div class="wrap">
     <h2>What I Did</h2>
-    <div class="body">
-      <p>[Walk through your process in your own words — the interesting decisions, the tricky bits, what you built or set up. This is the section people actually want to read — be specific and technical where it's interesting.]</p>
-      <ul>
-        <li>[Step, decision, or detail worth calling out]</li>
-        <li>[Step, decision, or detail worth calling out]</li>
-        <li>[Step, decision, or detail worth calling out]</li>
-      </ul>
+    <!--
+      STORY FLOW — one .story-block per beat of the process. Each block pairs
+      an image with the bit of text it illustrates, and blocks alternate
+      sides automatically when you add "reverse" to the class list.
+
+      To add a real image, replace the .img-placeholder div with:
+      <img src="../images/your-file-name.jpg" alt="[describe the image]">
+      Drop the image file into the /images folder first. Add or remove
+      .story-block sections freely — there's no fixed number.
+    -->
+    <div class="story">
+
+      <div class="story-block">
+        <div class="story-media">
+          <div class="img-placeholder">
+            <span class="label">images/[filename].jpg</span>
+            <span class="hint">Replace this div with an &lt;img&gt; tag once you have the file</span>
+          </div>
+        </div>
+        <div class="story-text">
+          <p>[Walk through your process in your own words — the interesting decisions, the tricky bits, what you built or set up. This is the section people actually want to read — be specific and technical where it's interesting.]</p>
+          <ul>
+            <li>[Step, decision, or detail worth calling out]</li>
+            <li>[Step, decision, or detail worth calling out]</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="story-block reverse">
+        <div class="story-media">
+          <div class="img-placeholder">
+            <span class="label">images/[filename].jpg</span>
+            <span class="hint">Replace this div with an &lt;img&gt; tag once you have the file</span>
+          </div>
+        </div>
+        <div class="story-text">
+          <ul>
+            <li>[Step, decision, or detail worth calling out]</li>
+          </ul>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -85,30 +120,19 @@
 
 <section class="detail-section">
   <div class="wrap">
-    <h2>Gallery</h2>
-    <!--
-      To add a real image, replace an entire .img-placeholder div with:
-      <img src="../images/your-file-name.jpg" alt="[describe the image]">
-      Drop the image file into the /images folder first.
-    -->
-    <div class="gallery">
-      <div class="img-placeholder">
-        <span class="label">images/[filename].jpg</span>
-        <span class="hint">Replace this div with an &lt;img&gt; tag once you have the file</span>
-      </div>
-      <div class="img-placeholder">
-        <span class="label">images/[filename].jpg</span>
-        <span class="hint">Replace this div with an &lt;img&gt; tag once you have the file</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="detail-section">
-  <div class="wrap">
     <h2>Results &amp; Reflections</h2>
-    <div class="body">
-      <p>[What came out of it? What worked, what didn't, what you'd do differently next time. This doesn't need to be a polished "achievement" — just an honest wrap-up.]</p>
+    <div class="story">
+      <div class="story-block">
+        <div class="story-media">
+          <div class="img-placeholder">
+            <span class="label">images/[filename].jpg</span>
+            <span class="hint">Replace this div with an &lt;img&gt; tag once you have the file</span>
+          </div>
+        </div>
+        <div class="story-text">
+          <p>[What came out of it? What worked, what didn't, what you'd do differently next time. This doesn't need to be a polished "achievement" — just an honest wrap-up.]</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
