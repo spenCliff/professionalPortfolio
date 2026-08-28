@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fluid–Structure Interaction Simulation — Spencer Clifford</title>
+<title>Fluid Structure Interaction of a Formula One Front Wing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,9 +13,8 @@
 
 <header class="site">
   <nav class="nav">
-    <a class="brand" href="../index.html">S. CLIFFORD</a>
+    <a class="brand" href="../index.html">Spencer Clifford</a>
     <ul>
-      <li><a class="navlink" href="../index.html#projects">Projects</a></li>
       <li><a class="navlink" href="../index.html#contact">Contact</a></li>
     </ul>
   </nav>
@@ -24,14 +23,17 @@
 <section class="project-hero">
   <div class="wrap">
     <a class="back-link" href="../index.html">← All projects</a>
-    <h1>Fluid–Structure Interaction Simulation</h1>
+    <h1>Fluid Structure Interaction of a Formula One Front Wing</h1>
     <div class="tags">
-      <span class="tag">Simulation</span>
       <span class="tag">FSI</span>
-      <span class="tag">[Add solver e.g. STAR-CCM+ / Abaqus]</span>
+      <span class="tag">Star-CCM+</span>
+      <span class="tag">Simulation</span>
     </div>
-    <p class="lede">[One or two sentences on what's being simulated and why FSI is the right approach for it.]</p>
-    <span class="placeholder-banner">In progress</span>
+
+    <div class="hero-flex">
+      <p class="lede">Modelled transient FSI behaviour of a front wing to characterise structural deflection under varying aerodynamic loads across a straight-line acceleration/deceleration cycle.</p>
+      <img class="hero-diagram" src="../images/[hero-image.jpg]" alt="[Hero image description]">
+    </div>
   </div>
 </section>
 
@@ -39,57 +41,59 @@
   <div class="wrap">
     <h2>Overview</h2>
     <div class="body">
-      <p>[What structure and flow are coupled here? What's the physical scenario — e.g. a flexible component deforming under aerodynamic load — and why does that coupling matter for this problem?]</p>
+      <p>The aim of this project was to investigate the aeroelastic behaviour of a front wing during an acceleration and deceleration cycle.</p>
+      <p>Telemetry data from Kimi Antonelli’s pole lap at Silverstone was used to reconstruct an approximate vehicle velocity profile along the Hangar Straight, providing the transient aerodynamic loading for the simulation.</p>
     </div>
   </div>
 </section>
 
 <section class="detail-section">
   <div class="wrap">
-    <h2>What I'm Doing</h2>
+    <h2>What I Did</h2>
+    <div class="body" style="margin-bottom:36px;">
+      <p>The simplified structural material model and isolated aerodynamic geometry mean the results are intended to demonstrate aeroelastic behaviour and FSI methodology rather than predict the deformation of a specific physical Formula 1 front wing.</p>
+      <p>The following assumptions were therefore adopted:</p>
+        <ul>
+          <li>Incompressible flow,</li>
+          <li><i>k</i>–ω SST RANS turbulence model,</li>
+          <li>Linear elastic structural behaviour,</li>
+          <li>Simplified shell-based structural representation,</li>
+          <li>Isolated front wing geometry,</li>
+          <li>Moving ground plane.</li>
+        </ul>
+        <p>Two-way coupling was used, allowing structural deformation to modify the fluid domain and subsequent aerodynamic loading.</p>
+    </div>
+
     <div class="story">
 
+      <!-- Story Block 1 (Image Right) -->
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/[step-1-image.png]" alt="[Image description]">
+        </div>
+        <div class="story-text">
+          <p><b>Preconditioning</b></p>
+            <ul> 
+              <li>The wing was preconditioned using a constant inlet velocity of 6.9 m/s for 3 seconds, corresponding to approximately three fluid-through times.</li>
+              <li>This initialisation period allowed the structural response to settle before the transient velocity profile was applied. Rayleigh damping was also introduced to dissipate residual structural oscillations and improve the stability of the coupled FSI solution.</li>
+            </ul>
+        </div>
+      </div>
+
+      <!-- Story Block 2 (Image Left) -->
       <div class="story-block">
         <div class="story-media">
-          <div class="img-placeholder">
-            <span class="label">images/fsi-setup.jpg</span>
-            <span class="hint">e.g. domain / mesh setup</span>
-          </div>
+          <img src="../images/[step-2-image.png]" alt="[Image description]">
         </div>
         <div class="story-text">
-          <p>[Describe your setup as you go — the coupling approach (one-way vs two-way), the solvers involved, meshing decisions, boundary conditions, anything tricky about getting the fluid and structural domains talking to each other.]</p>
+          <p><b>[Subheading 2]</b></p>
           <ul>
-            <li>[Step, decision, or detail worth calling out]</li>
-            <li>[Step, decision, or detail worth calling out]</li>
+            <li>[Key task or bullet point 1]</li>
+            <li>[Key task or bullet point 2]</li>
           </ul>
         </div>
       </div>
 
-      <div class="story-block reverse">
-        <div class="story-media">
-          <div class="img-placeholder">
-            <span class="label">images/fsi-results.jpg</span>
-            <span class="hint">e.g. deformation or pressure result</span>
-          </div>
-        </div>
-        <div class="story-text">
-          <ul>
-            <li>[Step, decision, or detail worth calling out]</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section class="detail-section">
-  <div class="wrap">
-    <h2>Tools &amp; Methods</h2>
-    <div class="tool-list">
-      <span class="tag">[Tool]</span>
-      <span class="tag">[Tool]</span>
-      <span class="tag">[Tool]</span>
     </div>
   </div>
 </section>
@@ -98,17 +102,28 @@
   <div class="wrap">
     <h2>Results &amp; Reflections</h2>
     <div class="story">
-      <div class="story-block">
-        <div class="story-media">
-          <div class="img-placeholder">
-            <span class="label">images/fsi-final.jpg</span>
-            <span class="hint">e.g. final coupled response</span>
-          </div>
+
+      <!-- Story Block 3 (Results) -->
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/[results-image.jpg]" alt="[Results image description]">
         </div>
         <div class="story-text">
-          <p>[Fill this in once you have results — what the coupled response looked like, whether it matched expectations, and anything you'd do differently.]</p>
+          <p>[Summary of outcome, findings, performance improvements, or lessons learned.]</p>
         </div>
       </div>
+
+      <!-- Side-by-Side Comparison Media Block -->
+      <div class="story-block">
+        <div class="story-media two-up">
+          <img src="../images/[comparison-1.jpg]" alt="[Comparison 1 description]">
+          <img src="../images/[comparison-2.jpg]" alt="[Comparison 2 description]">
+        </div>
+        <div class="story-text">
+          <p>[Conclusions and next steps or future applications.]</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
