@@ -7,26 +7,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<!-- Note: this file lives in /projects/, so style.css is one level up -->
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
-<!--
-  ============================================================
-  PROJECT PAGE TEMPLATE — copy this file and rename it, e.g.
-  projects/my-new-project.html, then fill in the [brackets].
-
-  Don't forget to also add a matching card on index.html
-  linking to your new file.
-  ============================================================
--->
-
 <header class="site">
   <nav class="nav">
-    <a class="brand" href="../index.html">S. CLIFFORD</a>
+    <a class="brand" href="../index.html">SPENCER CLIFFORD</a>
     <ul>
-      <li><a class="navlink" href="../index.html#projects">Projects</a></li>
       <li><a class="navlink" href="../index.html#contact">Contact</a></li>
     </ul>
   </nav>
@@ -37,14 +25,15 @@
     <a class="back-link" href="../index.html">← All projects</a>
     <h1>[Project Title]</h1>
     <div class="tags">
-      <span class="tag">[Tag e.g. Simulation]</span>
-      <span class="tag">[Tag e.g. Python]</span>
-      <span class="tag">[Tag e.g. Optimisation]</span>
+      <span class="tag">[Tag 1]</span>
+      <span class="tag">[Tag 2]</span>
+      <span class="tag">[Tag 3]</span>
     </div>
-    <p class="lede">[One or two sentences that sum up what this project is and why it's interesting — the hook.]</p>
 
-    <!-- If this project isn't finished yet, keep this line. Otherwise delete it. -->
-    <span class="placeholder-banner">In progress</span>
+    <div class="hero-flex">
+      <p class="lede">[Brief 1-2 sentence overview/hook for the project.]</p>
+      <img class="hero-diagram" src="../images/[hero-image.jpg]" alt="[Hero image description]">
+    </div>
   </div>
 </section>
 
@@ -52,7 +41,8 @@
   <div class="wrap">
     <h2>Overview</h2>
     <div class="body">
-      <p>[What is this project? Give the reader enough context to understand what they're looking at — what it does, what problem it's solving, and roughly how you approached it.]</p>
+      <p>[Detailed explanation of project background, objectives, and scope.]</p>
+      <p>[Additional context, key metrics, or repository links.]</p>
     </div>
   </div>
 </section>
@@ -60,60 +50,40 @@
 <section class="detail-section">
   <div class="wrap">
     <h2>What I Did</h2>
-    <!--
-      STORY FLOW — one .story-block per beat of the process. Each block pairs
-      an image with the bit of text it illustrates, and blocks alternate
-      sides automatically when you add "reverse" to the class list.
+    <div class="body" style="margin-bottom:36px;">
+      <p>[Introductory summary of the technical work and methodology.]</p>
+    </div>
 
-      To add a real image, replace the .img-placeholder div with:
-      <img src="../images/your-file-name.jpg" alt="[describe the image]">
-      Drop the image file into the /images folder first. Add or remove
-      .story-block sections freely — there's no fixed number.
-    -->
     <div class="story">
 
+      <!-- Story Block 1 (Image Right) -->
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/[step-1-image.png]" alt="[Image description]">
+        </div>
+        <div class="story-text">
+          <p><b>[Subheading 1]</b></p>
+          <ul>
+            <li>[Key task or bullet point 1]</li>
+            <li>[Key task or bullet point 2]</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Story Block 2 (Image Left) -->
       <div class="story-block">
         <div class="story-media">
-          <div class="img-placeholder">
-            <span class="label">images/[filename].jpg</span>
-            <span class="hint">Replace this div with an &lt;img&gt; tag once you have the file</span>
-          </div>
+          <img src="../images/[step-2-image.png]" alt="[Image description]">
         </div>
         <div class="story-text">
-          <p>[Walk through your process in your own words — the interesting decisions, the tricky bits, what you built or set up. This is the section people actually want to read — be specific and technical where it's interesting.]</p>
+          <p><b>[Subheading 2]</b></p>
           <ul>
-            <li>[Step, decision, or detail worth calling out]</li>
-            <li>[Step, decision, or detail worth calling out]</li>
+            <li>[Key task or bullet point 1]</li>
+            <li>[Key task or bullet point 2]</li>
           </ul>
         </div>
       </div>
 
-      <div class="story-block reverse">
-        <div class="story-media">
-          <div class="img-placeholder">
-            <span class="label">images/[filename].jpg</span>
-            <span class="hint">Replace this div with an &lt;img&gt; tag once you have the file</span>
-          </div>
-        </div>
-        <div class="story-text">
-          <ul>
-            <li>[Step, decision, or detail worth calling out]</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section class="detail-section">
-  <div class="wrap">
-    <h2>Tools &amp; Methods</h2>
-    <div class="tool-list">
-      <span class="tag">[Tool]</span>
-      <span class="tag">[Tool]</span>
-      <span class="tag">[Tool]</span>
-      <span class="tag">[Tool]</span>
     </div>
   </div>
 </section>
@@ -122,17 +92,28 @@
   <div class="wrap">
     <h2>Results &amp; Reflections</h2>
     <div class="story">
-      <div class="story-block">
-        <div class="story-media">
-          <div class="img-placeholder">
-            <span class="label">images/[filename].jpg</span>
-            <span class="hint">Replace this div with an &lt;img&gt; tag once you have the file</span>
-          </div>
+
+      <!-- Story Block 3 (Results) -->
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/[results-image.jpg]" alt="[Results image description]">
         </div>
         <div class="story-text">
-          <p>[What came out of it? What worked, what didn't, what you'd do differently next time. This doesn't need to be a polished "achievement" — just an honest wrap-up.]</p>
+          <p>[Summary of outcome, findings, performance improvements, or lessons learned.]</p>
         </div>
       </div>
+
+      <!-- Side-by-Side Comparison Media Block -->
+      <div class="story-block">
+        <div class="story-media two-up">
+          <img src="../images/[comparison-1.jpg]" alt="[Comparison 1 description]">
+          <img src="../images/[comparison-2.jpg]" alt="[Comparison 2 description]">
+        </div>
+        <div class="story-text">
+          <p>[Conclusions and next steps or future applications.]</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>

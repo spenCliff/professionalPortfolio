@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aero Optimisation Pipeline — Spencer Clifford</title>
+<title>Automated Surrogate-Based Aerodynamic Optimisation Pipeline</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,10 +13,9 @@
 
 <header class="site">
   <nav class="nav">
-    <a class="brand" href="../index.html">S. CLIFFORD</a>
+    <a class="brand" href="index.html">SPENCER CLIFFORD</a>
     <ul>
-      <li><a class="navlink" href="../index.html#projects">Projects</a></li>
-      <li><a class="navlink" href="../index.html#contact">Contact</a></li>
+      <li><a class="navlink" href="#contact">Contact</a></li>
     </ul>
   </nav>
 </header>
@@ -24,13 +23,15 @@
 <section class="project-hero">
   <div class="wrap">
     <a class="back-link" href="../index.html">← All projects</a>
-    <h1>Aero Optimisation Pipeline</h1>
+    <h1>Automated Surrogate-Based Aerodynamic Optimisation Pipeline</h1>
     <div class="tags">
-      <span class="tag">Automation</span>
-      <span class="tag">CFD</span>
+      <span class="tag">Python Automation</span>
       <span class="tag">Bayesian Optimisation</span>
-      <span class="tag">Python</span>
+      <span class="tag">Parametric CAD</span>
+      <span class="tag">CFD</span>
       <span class="tag">HPC</span>
+      <span class="tag">STAR-CCM+</span>
+      <span class="tag">SolidWorks</span>
     </div>
 
     <div class="hero-flex">
@@ -44,8 +45,9 @@
   <div class="wrap">
     <h2>Overview</h2>
     <div class="body">
-      <p>This dissertation supported my team, EKKO Solar Racing at the University of Southampton, which aims to compete in the Bridgestone World Solar Challenge. The project focused on mission energy used in a day of racing as a net energy accounting for solar input, aerodynamic drag, rolling resistance, and auxiliary loads.</p>
-      <p>This project developed a closed-loop aerodynamic optimisation pipeline to explore the trade-off between drag, solar panel area and vehicle stability, using the EKKO team's design as the baseline.</p>
+      <p>The aim of this project was to develop an automated pipeline for HPC communication and job submission, enabling continuous, long-term optimisation campaigns using high-fidelity simulations.</p>
+      <p>This dissertation supported EKKO Solar Racing at the University of Southampton in developing their Challenger-class solar car for the Bridgestone World Solar Challenge. The project modelled mission energy over a full day of racing, accounting for solar input, aerodynamic drag, rolling resistance and auxiliary loads.</p>
+      <p>The remaining universal code can be found at <a href="https://github.com/spenCliff/DSO" target="_blank" rel="noopener">https://github.com/spenCliff/DSO</a>.</p>
     </div>
   </div>
 </section>
@@ -59,11 +61,12 @@
 
     <div class="story">
 
-      <div class="story-block">
-        <div class="story-media">
-          <img src="../images/pipeline-aerofoil.png" alt="Final computational mesh with prism-layer inflation and wake refinement">
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/wind-tunnel-correlation.png" alt="Final computational mesh with prism-layer inflation and wake refinement">
         </div>
         <div class="story-text">
+          <p><b>Simulation Setup</b></p>
           <ul>
             <li>Constructed a parametric SolidWorks model and half-car STAR-CCM+ RANS simulation at 23 m/s, incorporating moving ground, rotating wheels, and a near-wall resolution of y⁺ &lt; 1.</li>
             <li>Verified the CFD setup through mesh and domain sensitivity studies.</li>
@@ -72,30 +75,30 @@
         </div>
       </div>
 
-      <div class="story-block reverse">
+      <div class="story-block">
         <div class="story-media">
           <img src="../images/pipeline-flow.png" alt="Automated orchestration loop linking optimisation, collection, and submission drivers to the HPC cluster">
         </div>
         <div class="story-text">
+          <p><b>Pipeline Setup</b></p>
           <ul>
-            <li>Developed a Python orchestration system linking the optimisation workflow to the Iridis 6 HPC cluster, allowing simulations to run, pause and resume autonomously.</li>
-            <li>Validated the pipeline using a Pareto front study on a wing.</li>
             <li>Implemented pitch-constrained Bayesian optimisation using Meta’s Ax platform, optimising mission energy from drag, solar area and rolling resistance.</li>
+            <li>Developed a Python orchestration system linking the optimisation workflow to the Iridis 6 HPC cluster, allowing simulations to run, pause and resume autonomously.</li>
           </ul>
         </div>
       </div>
 
-      <div class="story-block">
-        <div class="story-media">
-          <img src="../images/pipeline-results.jpg" alt="Best feasible mission-energy proxy versus completed trial number">
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img class="img-shrink-65" src="../images/pipeline-aerofoil.png" alt="Automated orchestration loop linking optimisation, collection, and submission drivers to the HPC cluster">
         </div>
         <div class="story-text">
+          <p><b>Pipeline Validation</b></p>
           <ul>
-            <li>Completed 221 of 250 trials. The best design reduced predicted daily battery energy consumption by 37.6%</li>
+            <li> A Pareto front study on a low-aspect wing was conducted to validate the framework robustness and optimisation implementation.</li>
           </ul>
         </div>
       </div>
-
     </div>
   </div>
 </section>
@@ -105,12 +108,21 @@
     <h2>Results &amp; Reflections</h2>
     <div class="story">
 
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/pipeline-results.jpg" alt="Best feasible mission-energy proxy versus completed trial number">
+        </div>
+        <div class="story-text">
+          <p>The campaign reduced predicted daily energy losses by 37.6%, with most improvement achieved within the first 40-50 trials. This highlighted the potential to reduce future computational cost through tighter stopping criteria.</p>
+        </div>
+      </div>
+
       <div class="story-block">
         <div class="story-media">
           <img src="../images/pipeline-flowfield.jpg" alt="Total-pressure coefficient wake contours comparing baseline and optimised trial">
         </div>
         <div class="story-text">
-          <p>The optimisation reduced predicted daily energy losses by 37.6%, with most improvement achieved within the first 40–50 trials. This highlighted the potential to reduce future computational cost through tighter stopping criteria.</p>
+          <p>The optimiser focused changes on the rear body, improving pressure recovery, delaying separation and reducing wake size, while maintaining maximum solar collection area.</p>
         </div>
       </div>
 
@@ -120,30 +132,10 @@
           <img src="../images/pipeline-wake-optimised.jpg" alt="Rear-body streamline visualisation of the optimised design showing delayed separation and a reduced wake">
         </div>
         <div class="story-text">
-          <p>The optimiser focused changes on the rear body, improving pressure recovery, delaying separation and reducing wake size, while maintaining maximum solar collection area.</p>
+        <p>The final design remains a candidate rather than a race-ready geometry, but the resulting CAD-CFD-HPC optimisation pipeline provides EKKO with a reusable framework for future aerodynamic studies.</p>
         </div>
       </div>
 
-      <div class="body" style="margin-top:8px;">
-        <p>The final design remains a candidate rather than a race-ready geometry, but the resulting CAD–CFD–HPC optimisation pipeline provides EKKO with a reusable framework for future aerodynamic studies.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section class="detail-section">
-  <div class="wrap">
-    <h2>Tools &amp; Methods</h2>
-    <div class="tool-list">
-      <span class="tag">STAR-CCM+</span>
-      <span class="tag">SolidWorks</span>
-      <span class="tag">Python</span>
-      <span class="tag">Meta Ax</span>
-      <span class="tag">SLURM / HPC</span>
-      <span class="tag">SSH &amp; SCP automation</span>
-      <span class="tag">Bayesian optimisation</span>
-      <span class="tag">Parametric CAD</span>
     </div>
   </div>
 </section>
