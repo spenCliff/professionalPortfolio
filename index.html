@@ -11,16 +11,6 @@
 </head>
 <body>
 
-<!--
-  HOW TO ADD A NEW PROJECT
-  1. Copy /project-template.html into /projects/ and rename it (e.g. projects/my-new-project.html).
-  2. Fill in the bracketed placeholders in that file.
-  3. Copy one <a class="project-row">...</a> block below, edit the title/tags/summary,
-     point the href at your new file, and set the thumbnail image or placeholder.
-  4. Image sits on the left by default. Add class="project-row reverse" to flip a specific
-     row's image to the right if you ever want one.
--->
-
 <header class="site">
   <nav class="nav">
     <a class="brand" href="index.html">Spencer Clifford</a>
@@ -44,7 +34,7 @@
   <div class="project-list">
 
       <a class="project-row" href="projects/fsi-simulation.html">
-        <div class="row-media"><span>image placeholder</span></div>
+        <div class="row-media"><img src="images/FSI/fsi.jpg" alt="Flexi-wing"></div>
         <div class="row-body">
           <h3>Fluid Structure Interaction of a Formula One Front Wing</h3>
           <div class="tags">
@@ -83,13 +73,28 @@
       </a>
 
       <a class="project-row" href="projects/ground-effect.html">
-        <div class="row-media"><img src="images/pipeline-wake-baseline.jpg" alt="SUFST Wind Tunnel img"></div>
+        <div class="row-media"><img src="images/FC/fan-car.jpg" alt="Fan Car"></div>
         <div class="row-body">
           <h3>Fan car.</h3>
           <div class="tags">
             <span class="tag">Transient</span>
             <span class="tag">CFD</span>
             <span class="tag">STAR-CCM+</span>
+          </div>
+          <p>Mapping an active ground effect car.</p>
+        </div>
+      </a>
+
+      <a class="project-row" href="projects/race-eng.html">
+        <div class="row-media padded-img">
+          <img src="images/RE/gg-combined.png" alt="GG Diagram">
+        </div>
+        <div class="row-body">
+          <h3>Telemetry-Based Vehicle Performance Mapping</h3>
+          <div class="tags">
+            <span class="tag">Vehicle Dynamics</span>
+            <span class="tag">Python</span>
+            <span class="tag">Race Engineering</span>
           </div>
           <p>Mapping an active ground effect car.</p>
         </div>

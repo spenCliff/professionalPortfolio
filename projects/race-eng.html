@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telemetry-Based Vehicle Performance Mapping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .math-block {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .math-block p { margin: 4px 0; }
+  .math-block .eq-highlight {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 8px;
+  }
+  
+  pre.code-snippet {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 16px;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.5;
+    margin: 0;
+    border: 1px solid var(--line);
+  }
+  pre.code-snippet code { font-family: inherit; }
+  .kw { color: #569cd6; }
+  .com { color: #6a9955; }
+  .str { color: #ce9178; }
+  .num { color: #b5cea8; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav">
+    <a class="brand" href="../index.html">Spencer Clifford</a>
+    <ul>
+      <li><a class="navlink" href="mailto:spencercliff@outlook.com">Email</a></li>
+      <li><a class="navlink" href="https://www.linkedin.com/in/spencer-clifford-a9a037270" target="_blank" rel="noopener">LinkedIn</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="project-hero">
+  <div class="wrap">
+    <a class="back-link" href="../index.html">← All projects</a>
+    <h1>Telemetry-Based Vehicle Performance Mapping</h1>
+    <div class="tags">
+      <span class="tag">Vehicle Dynamics</span>
+      <span class="tag">Python</span>
+      <span class="tag">Race Engineering</span>
+    </div>
+
+    <div class="hero-flex">
+      <p class="lede">Extracting dynamic downforce coefficients ($C_L$) and mapping performance regimes using single-lap race telemetry, friction-limit modeling, and spatial trajectory integration.</p>
+      <img class="hero-diagram" src="../images/RE/limited-circuit.png" alt="Circuit layout showing power-limited vs grip-limited operating regimes">
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Overview &amp; Mathematical Framework</h2>
+    <div class="body">
+      <p>This project evaluates dynamic vehicle limits by processing multi-channel telemetry metrics including speed, longitudinal acceleration, lateral acceleration, throttle position, and brake pressure. By modeling total normal force ($N = mg + L$) relative to tire friction boundaries ($\mu = 1.8$), we isolate pure aerodynamic downforce contributions from static mass effects.</p>
+
+      <!-- Math Derivation Callout Block -->
+      <div class="math-block">
+        <p><b>1. Vectorized Acceleration Magnitude:</b> $a_{\text{total}} = \sqrt{a_x^2 + a_y^2}$</p>
+        <p><b>2. Normal Force Balance:</b> $F_{\text{max}} = \mu N = \mu \left(m g + \frac{1}{2} \rho V^2 S C_L\right)$</p>
+        <p><b>3. Limit Balance Equivalence:</b> $m a_{\text{total}} = F_{\text{max}}$</p>
+        <p class="eq-highlight"><b>Governing $C_L$ Equation:</b> $C_L = \frac{2m}{\rho S V^2} \left( \frac{\sqrt{a_x^2 + a_y^2}}{\mu} - g \right)$</p>
+      </div>
+
+      <p>Data points are filtered across power-saturated straightaways and transient shifting events to guarantee downforce estimation ($C_L$) occurs strictly when the chassis operates at the tire traction limit.</p>
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Methodology &amp; Implementation</h2>
+    <div class="body" style="margin-bottom:36px;">
+      <p>The Python analytical pipeline processes raw lap telemetry to segment dynamic performance envelopes, derive lift coefficients, and quantify trajectory deltas.</p>
+    </div>
+
+    <div class="story">
+
+      <!-- Story Block 1: Telemetry Channels -->
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/RE/telemetry.png" alt="Multi-channel telemetry traces over lap distance including speed, longitudinal and lateral g-forces, throttle, and brake inputs">
+        </div>
+        <div class="story-text">
+          <p><b>Multi-Channel Telemetry Ingestion</b></p>
+          <ul>
+            <li>Processed time-series channels across a 5,000m lap, synchronizing vehicle speed, $a_x$, $a_y$, throttle position, brake pressure, steering angle, and DRS actuation.</li>
+            <li>Applied signal filtering to eliminate transient sensor noise and shifting artifacts prior to calculating dynamic force vectors.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Story Block 2: Code Snippet & Aero Limit Isolation -->
+      <div class="story-block">
+        <div class="story-media fit-content">
+          <pre class="code-snippet"><code><span class="com"># Calculate dynamic aerodynamic lift coefficient (CL)</span>
+mp[<span class="str">'CL'</span>] = (
+    ((<span class="num">2</span> * carMass) / (rho * frontArea * mp[<span class="str">'speed'</span>]**<span class="num">2</span>)) * 
+    ((np.sqrt(mp[<span class="str">'longAcc'</span>]**<span class="num">2</span> + mp[<span class="str">'latAcc'</span>]**<span class="num">2</span>) / mu) - g)
+)
+
+<span class="com"># Isolate true grip-limited peak downforce</span>
+maxCL = mp[<span class="str">'CL'</span>].max()
+print(f<span class="str">"Maximum downforce coefficient: {maxCL:.2f}"</span>)</code></pre>
+        </div>
+        <div class="story-text">
+          <p><b>Aerodynamic Limit Isolation</b></p>
+          <ul>
+            <li>Vectorized NumPy transformations evaluate dynamic pressure ($q = \frac{1}{2}\rho V^2$) and vehicle load balance at scale.</li>
+            <li>Isolated maximum downforce values strictly within traction-bound corners and braking zones.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Story Block 3: GG Plot & Visual Regimes -->
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/RE/gg.png" alt="GG Diagrams showing power-limited vs grip-limited acceleration domains against the baseline friction boundary">
+        </div>
+        <div class="story-text">
+          <p><b>GG Friction Circle Expansion</b></p>
+          <ul>
+            <li>Mapped combined lateral and longitudinal g-forces against the static friction boundary ($\mu = 1.8$). High-speed braking zones reach up to ~4–5g, directly demonstrating aero downforce scaling.</li>
+            <li>Separated telemetry points into distinct domains: <i>Power-Limited</i> (engine output bounds acceleration) and <i>Grip-Limited</i> (tire traction bounds performance).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Story Block 4: Power Curve & Spatial Tracking -->
+      <div class="story-block">
+        <div class="story-media fit-content">
+          <img src="../images/RE/power-curve.png" alt="Power vs Speed Curve showing global power envelope and traction-limited data scatter">
+        </div>
+        <div class="story-text">
+          <p><b>Power vs. Speed Envelope &amp; Spatial Tracking</b></p>
+          <ul>
+            <li>Evaluated engine saturation thresholds across vehicle velocity ranges to confirm straightaway power limits versus cornering grip limits.</li>
+            <li>Reconstructed full spatial circuit geometry (using integrated telemetry velocity vectors) to compare dead-reckoned track trajectories against GPS coordinates.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Results &amp; Future Development</h2>
+    <div class="story">
+
+      <!-- Story Block 5: Summary & Circuit Layout -->
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/RE/circuit.png" alt="Reconstructed spatial circuit layout from telemetry channel integration">
+        </div>
+        <div class="story-text">
+          <p>The aerodynamic limit model effectively separates engine power constraints from tire traction limits, showing clear GG circle expansion beyond the static $\mu = 1.8$ threshold under high-speed dynamic loads. Reconstructing spatial circuit coordinates from velocity telemetry revealed localized positional drift during trail-braking entry phases.</p>
+        </div>
+      </div>
+
+      <!-- Side-by-Side Media Block -->
+      <div class="story-block">
+        <div class="story-media two-up">
+          <img src="../images/RE/limited-circuit.png" alt="Circuit layout segmented by grip-limited cornering zones and power-limited acceleration zones">
+          <img src="../images/RE/power-curve.png" alt="Power vs speed curve envelope plot">
+        </div>
+        <div class="story-text">
+          <p>Future work involves adapting the pipeline to ingest live <code>FastF1</code> data feeds, adding suspension potentiometer channels for pitch/roll dynamic downforce mapping, and implementing a Kalman Filter to eliminate telemetry integration drift against real-time GPS coordinates.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="site" id="contact">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="copyline">Southampton, UK</div>
+      <div class="footer-links">
+        <a href="mailto:spencercliff@outlook.com">Email</a>
+        <a href="https://www.linkedin.com/in/spencer-clifford-a9a037270" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
