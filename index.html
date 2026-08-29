@@ -15,15 +15,18 @@
   HOW TO ADD A NEW PROJECT
   1. Copy /project-template.html into /projects/ and rename it (e.g. projects/my-new-project.html).
   2. Fill in the bracketed placeholders in that file.
-  3. Copy one <a class="project-card">...</a> block below, edit the title/tags/summary,
-     point the href at your new file, and set the thumbnail label.
+  3. Copy one <a class="project-row">...</a> block below, edit the title/tags/summary,
+     point the href at your new file, and set the thumbnail image or placeholder.
+  4. Image sits on the left by default. Add class="project-row reverse" to flip a specific
+     row's image to the right if you ever want one.
 -->
 
 <header class="site">
   <nav class="nav">
     <a class="brand" href="index.html">Spencer Clifford</a>
     <ul>
-      <li><a class="navlink" href="#contact">Contact</a></li>
+      <li><a class="navlink" href="mailto:spencercliff@outlook.com">Email</a></li>
+      <li><a class="navlink" href="https://www.linkedin.com/in/spencer-clifford-a9a037270" target="_blank" rel="noopener">LinkedIn</a></li>
     </ul>
   </nav>
 </header>
@@ -36,58 +39,78 @@
 </section>
 
 <section class="grid-section" id="projects">
+  <div class="wrap">
 
-  <div class="carousel-track" id="carouselTrack">
+  <div class="project-list">
 
-      <a class="project-card" href="projects/optimisation-pipeline.html">
-          <div class="card-thumb"><img src="images/pipeline-wake-baseline.jpg" alt="Aero Optimisation Pipeline"></div>
-        <div class="card-body">
+      <a class="project-row" href="projects/fsi-simulation.html">
+        <div class="row-media"><span>image placeholder</span></div>
+        <div class="row-body">
+          <h3>Fluid Structure Interaction of a Formula One Front Wing</h3>
+          <div class="tags">
+            <span class="tag">Simulation</span>
+            <span class="tag">FSI</span>
+          </div>
+          <p>Modelling transient aeroelastic behaviour of a front wing across a straight-line acceleration/deceleration cycle.</p>
+          <span class="row-status">In progress</span>
+        </div>
+      </a>
+
+      <a class="project-row" href="projects/sufst-wt.html">
+        <div class="row-media"><img src="images/WT/flow-vis-front-2.jpg" alt="SUFST Wind Tunnel img"></div>
+        <div class="row-body">
+          <h3>Formula Student Wind Tunnel Testing</h3>
+          <div class="tags">
+            <span class="tag">Wind Tunnel</span>
+            <span class="tag">Formula Student</span>
+            <span class="tag">Experimental Correlation</span>
+          </div>
+          <p>50% Scale experimental testing and CFD correlation.</p>
+        </div>
+      </a>
+
+      <a class="project-row" href="projects/optimisation-pipeline.html">
+        <div class="row-media"><img src="images/pipeline-wake-baseline.jpg" alt="Aero Optimisation Pipeline"></div>
+        <div class="row-body">
+          <h3>Automated Surrogate-Based Aerodynamic Optimisation Pipeline</h3>
           <div class="tags">
             <span class="tag">Simulation</span>
             <span class="tag">Optimisation</span>
             <span class="tag">Python</span>
           </div>
-          <h3>Automated Surrogate-Based Aerodynamic Optimisation Pipeline</h3>
           <p>An automated pipeline linking CAD, CFD, and Bayesian optimisation to explore a solar racecar's aero design space without babysitting every run.</p>
         </div>
       </a>
 
-      <a class="project-card" href="projects/fsi-simulation.html">
-        <div class="card-thumb"><span>image placeholder</span></div>
-        <div class="card-body">
+      <a class="project-row" href="projects/ground-effect.html">
+        <div class="row-media"><img src="images/pipeline-wake-baseline.jpg" alt="SUFST Wind Tunnel img"></div>
+        <div class="row-body">
+          <h3>Fan car.</h3>
           <div class="tags">
-            <span class="tag">Simulation</span>
-            <span class="tag">FSI</span>
+            <span class="tag">Transient</span>
+            <span class="tag">CFD</span>
+            <span class="tag">STAR-CCM+</span>
           </div>
-          <h3>Fluid–Structure Interaction Simulation</h3>
-          <p>Setting up a coupled fluid–structure interaction simulation — currently in progress.</p>
-          <span class="card-status">In progress</span>
+          <p>Mapping an active ground effect car.</p>
         </div>
       </a>
 
-            <a class="project-card" href="projects/sufst-optimisation.html">
-        <div class="card-thumb"><span>image placeholder</span></div>
-        <div class="card-body">
+      <a class="project-row" href="projects/sufst-optimisation.html">
+        <div class="row-media"><span>image placeholder</span></div>
+        <div class="row-body">
+          <h3>Template</h3>
           <div class="tags">
             <span class="tag">Simulation</span>
             <span class="tag">Optimisation</span>
             <span class="tag">Python</span>
             <span class="tag">Formula Student</span>
           </div>
-          <h3>Formula student Optimisation</h3>
-          <p>Progressing my optimisation pipeline to create a generalised tool for our Formula Student team.</p>
-          <span class="card-status">In progress</span>
+          <p>Project 123.</p>
+          <span class="row-status">In progress</span>
         </div>
       </a>
 
   </div>
-
-  <div class="wrap">
-    <div class="carousel-controls">
-      <button class="carousel-btn prev" type="button" aria-label="Previous project">‹</button>
-      <div class="carousel-dots" id="carouselDots"></div>
-      <button class="carousel-btn next" type="button" aria-label="Next project">›</button>
-    </div>
   </div>
 </section>
 
@@ -105,53 +128,24 @@
 
 <script>
 (function(){
-  const track = document.getElementById('carouselTrack');
-  if(!track) return;
-  const cards = Array.from(track.children);
-  const prevBtn = document.querySelector('.carousel-btn.prev');
-  const nextBtn = document.querySelector('.carousel-btn.next');
-  const dotsWrap = document.getElementById('carouselDots');
+  const rows = document.querySelectorAll('.project-row');
+  if(!rows.length) return;
 
-  cards.forEach((_, i) => {
-    const dot = document.createElement('button');
-    dot.type = 'button';
-    dot.className = 'dot';
-    dot.setAttribute('aria-label', 'Go to project ' + (i + 1));
-    dot.addEventListener('click', () => scrollToCard(i));
-    dotsWrap.appendChild(dot);
-  });
-  const dots = Array.from(dotsWrap.children);
-
-  function scrollToCard(i){
-    track.scrollTo({ left: cards[i].offsetLeft - track.offsetLeft, behavior: 'smooth' });
+  if(!('IntersectionObserver' in window)){
+    rows.forEach(r => r.classList.add('in-view'));
+    return;
   }
 
-  function currentIndex(){
-    let closest = 0, closestDist = Infinity;
-    cards.forEach((card, i) => {
-      const dist = Math.abs((card.offsetLeft - track.offsetLeft) - track.scrollLeft);
-      if(dist < closestDist){ closestDist = dist; closest = i; }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
     });
-    return closest;
-  }
+  }, { threshold: 0, rootMargin: '0px 0px -20px 0px' });
 
-  function updateUI(){
-    const i = currentIndex();
-    dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
-    if(prevBtn) prevBtn.disabled = i === 0;
-    if(nextBtn) nextBtn.disabled = i === cards.length - 1;
-  }
-
-  let raf;
-  track.addEventListener('scroll', () => {
-    cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(updateUI);
-  });
-
-  if(prevBtn) prevBtn.addEventListener('click', () => scrollToCard(Math.max(0, currentIndex() - 1)));
-  if(nextBtn) nextBtn.addEventListener('click', () => scrollToCard(Math.min(cards.length - 1, currentIndex() + 1)));
-
-  updateUI();
+  rows.forEach(row => observer.observe(row));
 })();
 </script>
 </body>

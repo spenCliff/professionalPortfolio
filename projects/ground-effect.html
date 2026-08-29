@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ground-Effect Aerodynamics of a Fan Car — Spencer Clifford</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav">
+    <a class="brand" href="../index.html">Spencer Clifford</a>
+    <ul>
+      <li><a class="navlink" href="mailto:spencercliff@outlook.com">Email</a></li>
+      <li><a class="navlink" href="https://www.linkedin.com/in/spencer-clifford-a9a037270" target="_blank" rel="noopener">LinkedIn</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="project-hero">
+  <div class="wrap">
+    <a class="back-link" href="../index.html">← All projects</a>
+    <h1>Ground-Effect Aerodynamics of a Fan Car</h1>
+    <div class="tags">
+      <span class="tag">Aerodynamics</span>
+      <span class="tag">CFD</span>
+      <span class="tag">Ground Effect</span>
+      <span class="tag">STAR-CCM+</span>
+    </div>
+
+    <div class="hero-flex">
+      <p class="lede">Investigated the aerodynamic behaviour of a ground-effect fan car, focusing on ride-height sensitivity, underbody flow physics and correlation against experimental data.</p>
+      <img class="hero-diagram" src="../images/fancar-hero.jpg" alt="Fan car CFD visualisation">
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Overview</h2>
+    <div class="body">
+      <p>Ground-effect vehicles generate downforce by accelerating airflow beneath the floor and creating a region of low pressure. However, this performance is highly sensitive to ride height, with excessive proximity to the ground potentially causing flow separation and a loss of downforce.</p>
+      <p>I developed a CFD model of a simplified fan car to investigate these effects, examining the relationship between ride height, underbody flow and aerodynamic performance before correlating the results against experimental data.</p>
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>What I Did</h2>
+    <div class="body" style="margin-bottom:36px;">
+      <p>Built a validated CFD model before using it to investigate the sensitivity of ground-effect performance to ride height and underbody geometry.</p>
+    </div>
+
+    <div class="story">
+
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/fancar-geometry.jpg" alt="Fan car geometry">
+        </div>
+        <div class="story-text">
+          <p><b>Geometry &amp; CFD Setup</b></p>
+          <ul>
+            <li>Developed a simplified ground-effect vehicle geometry capturing the key aerodynamic features of the underbody.</li>
+            <li>Created the computational domain and ground boundary to reproduce the relevant test conditions.</li>
+            <li>Applied local mesh refinement and near-wall treatment around the floor, diffuser and wake.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="story-block">
+        <div class="story-media">
+          <img src="../images/fancar-mesh.jpg" alt="Fan car CFD mesh">
+        </div>
+        <div class="story-text">
+          <p><b>Ground-Effect Investigation</b></p>
+          <ul>
+            <li>Simulated a range of ride heights to quantify their effect on downforce and drag.</li>
+            <li>Analysed pressure distributions, velocity fields and flow structures beneath the vehicle to identify the mechanisms driving performance changes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/fancar-pressure.jpg" alt="Fan car underbody pressure distribution">
+        </div>
+        <div class="story-text">
+          <p><b>Flow Physics</b></p>
+          <ul>
+            <li>Investigated the acceleration of underbody flow and subsequent pressure recovery through the diffuser.</li>
+            <li>Examined the transition from increasing downforce to performance deterioration at low ride heights.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Correlation</h2>
+    <div class="body" style="margin-bottom:36px;">
+      <p>CFD predictions were compared against published experimental data at matched operating conditions to assess whether the model reproduced the observed aerodynamic behaviour.</p>
+    </div>
+
+    <div class="story">
+
+      <div class="story-block reverse">
+        <div class="story-media">
+          <img src="../images/correlation-forces.jpg" alt="CFD and experimental correlation">
+        </div>
+        <div class="story-text">
+          <p><b>CFD vs Experiment</b></p>
+          <ul>
+            <li>Compared aerodynamic coefficients across the available ride-height conditions.</li>
+            <li>Evaluated both the magnitude and trend of the predicted aerodynamic forces.</li>
+            <li>Used percentage deviation to quantify correlation and identify regions of greater modelling sensitivity.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="story-block">
+        <div class="story-media two-up">
+          <img src="../images/correlation-cl.jpg" alt="Lift coefficient correlation">
+          <img src="../images/correlation-cd.jpg" alt="Drag coefficient correlation">
+        </div>
+        <div class="story-text">
+          <p><b>Correlation Results</b></p>
+          <p>The model reproduced the overall aerodynamic trends with ride height, providing confidence in the underlying ground-effect behaviour. Differences between CFD and experiment were considered in the context of geometric simplification, turbulence modelling and the sensitivity of the underbody flow.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Results &amp; Reflections</h2>
+    <div class="story">
+
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/fancar-results.jpg" alt="Ground-effect aerodynamic results">
+        </div>
+        <div class="story-text">
+          <p>The study demonstrated the strong sensitivity of ground-effect performance to ride height. Increasing downforce was not simply a case of reducing ground clearance; beyond an optimum region, changes in the underbody flow caused aerodynamic performance to deteriorate.</p>
+        </div>
+      </div>
+
+      <div class="story-block">
+        <div class="story-media two-up">
+          <img src="../images/fancar-final-pressure.jpg" alt="Final pressure distribution">
+          <img src="../images/fancar-final-streamlines.jpg" alt="Final flow visualisation">
+        </div>
+        <div class="story-text">
+          <p>Correlation highlighted the importance of validating CFD methodology before using simulation results to guide aerodynamic design decisions. The project strengthened my understanding of ground-effect flow physics and the relationship between aerodynamic performance and vehicle ride height.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="site" id="contact">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="copyline">Southampton, UK</div>
+      <div class="footer-links">
+        <a href="mailto:spencercliff@outlook.com">Email</a>
+        <a href="https://www.linkedin.com/in/spencer-clifford-a9a037270" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

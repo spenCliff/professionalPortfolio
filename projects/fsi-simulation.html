@@ -15,7 +15,8 @@
   <nav class="nav">
     <a class="brand" href="../index.html">Spencer Clifford</a>
     <ul>
-      <li><a class="navlink" href="../index.html#contact">Contact</a></li>
+      <li><a class="navlink" href="mailto:spencercliff@outlook.com">Email</a></li>
+      <li><a class="navlink" href="https://www.linkedin.com/in/spencer-clifford-a9a037270" target="_blank" rel="noopener">LinkedIn</a></li>
     </ul>
   </nav>
 </header>
@@ -26,8 +27,10 @@
     <h1>Fluid Structure Interaction of a Formula One Front Wing</h1>
     <div class="tags">
       <span class="tag">FSI</span>
-      <span class="tag">Star-CCM+</span>
-      <span class="tag">Simulation</span>
+      <span class="tag">STAR-CCM+</span>
+      <span class="tag">CFD</span>
+      <span class="tag">Aeroelasticity</span>
+      <span class="tag">Transient Simulation</span>
     </div>
 
     <div class="hero-flex">
@@ -67,30 +70,46 @@
     <div class="story">
 
       <!-- Story Block 1 (Image Right) -->
+
       <div class="story-block reverse">
         <div class="story-media fit-content">
           <img src="../images/[step-1-image.png]" alt="[Image description]">
         </div>
         <div class="story-text">
-          <p><b>Preconditioning</b></p>
+          <p><b>Simulation Setup</b></p>
             <ul> 
-              <li>The wing was preconditioned using a constant inlet velocity of 6.9 m/s for 3 seconds, corresponding to approximately three fluid-through times.</li>
-              <li>This initialisation period allowed the structural response to settle before the transient velocity profile was applied. Rayleigh damping was also introduced to dissipate residual structural oscillations and improve the stability of the coupled FSI solution.</li>
+              <li>Mesh refinement.</li>
+              <li>Shell-based structural model.</li>
+              <li>Two-way FSI coupling</li>
+            </ul>
+        </div>
+      </div>
+
+
+      <div class="story-block">
+        <div class="story-media fit-content">
+          <img src="../images/[step-1-image.png]" alt="[Image description]">
+        </div>
+        <div class="story-text">
+          <p><b>Transient Loading</b></p>
+            <ul> 
+              <li>Transient velocity profile.</li>
+              <li>Moving ground plane.</li>
             </ul>
         </div>
       </div>
 
       <!-- Story Block 2 (Image Left) -->
-      <div class="story-block">
+      <div class="story-block reverse">
         <div class="story-media">
           <img src="../images/[step-2-image.png]" alt="[Image description]">
         </div>
         <div class="story-text">
-          <p><b>[Subheading 2]</b></p>
-          <ul>
-            <li>[Key task or bullet point 1]</li>
-            <li>[Key task or bullet point 2]</li>
-          </ul>
+          <p><b>Preconditioning</b></p>
+            <ul> 
+              <li>The wing was preconditioned using a constant inlet velocity of 6.9 m/s for 4.5 seconds, corresponding to approximately 4.5 fluid-through times.</li>
+              <li>This initialisation period allowed the structural response to settle before the transient velocity profile was applied. Rayleigh damping was also introduced to dissipate residual structural oscillations and improve the stability of the coupled FSI solution.</li>
+            </ul>
         </div>
       </div>
 
@@ -109,7 +128,8 @@
           <img src="../images/[results-image.jpg]" alt="[Results image description]">
         </div>
         <div class="story-text">
-          <p>[Summary of outcome, findings, performance improvements, or lessons learned.]</p>
+          <p><b>Aeroelastic Response</b></p>
+          <p>Wing deformation.</p>
         </div>
       </div>
 
@@ -120,7 +140,8 @@
           <img src="../images/[comparison-2.jpg]" alt="[Comparison 2 description]">
         </div>
         <div class="story-text">
-          <p>[Conclusions and next steps or future applications.]</p>
+          <p><b>Rigid vs Deformable Comparison</b></p>
+          <p>Force and velocity plots?</p>
         </div>
       </div>
 
