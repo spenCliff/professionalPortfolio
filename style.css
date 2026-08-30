@@ -191,7 +191,7 @@ header.site{
   text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-faint);
   margin-bottom:18px;
 }
-.detail-section .body{ max-width:65ch; color:var(--ink-soft); font-size:16px; }
+.detail-section .body{ color:var(--ink-soft); font-size:16px; }
 .detail-section .body p + p{ margin-top:14px; }
 .detail-section .body ul{ padding-left:20px; margin:14px 0 0; }
 .detail-section .body li + li{ margin-top:8px; }
@@ -258,6 +258,16 @@ header.site{
 }
 .story-block.reverse > .story-media{ order:2; }
 .story-block.reverse > .story-text{ order:1; }
+
+/* Text-only blocks (no <img> in the markup at all) stretch full width.
+   Blocks that DO have an image keep the two-column layout, even if
+   that image hasn't been uploaded yet. */
+.story-block:not(:has(.story-media)){
+  grid-template-columns: 1fr;
+}
+.story-block:not(:has(.story-media)) .story-text{
+  max-width: none;
+}
 
 .story-media{
   border:1px solid var(--line);

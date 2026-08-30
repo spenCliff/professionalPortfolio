@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Telemetry-Based Vehicle Performance Mapping</title>
+<title>Distance-Aligned Lap Comparison &amp; Driving-State Analysis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
     color: var(--accent);
     margin-top: 8px;
   }
-  
+
   pre.code-snippet {
     background: var(--ink);
     color: var(--bg);
@@ -45,6 +45,24 @@
   .com { color: #6a9955; }
   .str { color: #ce9178; }
   .num { color: #b5cea8; }
+
+  .state-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .state-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .state-legend i {
+    width: 12px; height: 12px; border-radius: 2px; display: inline-block;
+  }
 </style>
 </head>
 <body>
@@ -62,35 +80,34 @@
 <section class="project-hero">
   <div class="wrap">
     <a class="back-link" href="../index.html">← All projects</a>
-    <h1>Telemetry-Based Vehicle Performance Mapping</h1>
+    <h1>Distance-Aligned Lap Comparison &amp; Driving-State Analysis</h1>
     <div class="tags">
-      <span class="tag">Vehicle Dynamics</span>
+      <span class="tag">FastF1</span>
       <span class="tag">Python</span>
       <span class="tag">Race Engineering</span>
     </div>
 
     <div class="hero-flex">
-      <p class="lede">Extracting dynamic downforce coefficients ($C_L$) and mapping performance regimes using single-lap race telemetry, friction-limit modeling, and spatial trajectory integration.</p>
-      <img class="hero-diagram" src="../images/RE/limited-circuit.png" alt="Circuit layout showing power-limited vs grip-limited operating regimes">
+      <p class="lede">A telemetry pipeline that aligns two F1 laps onto a common distance axis, tracks the cumulative time delta between them metre by metre, and auto-generates plain-English coaching notes on exactly where and how one driver gained &mdash; later braking, more corner speed, or an earlier return to throttle.</p>
+      <img class="hero-diagram" src="../images/RE/HAM_states.png" alt="Hamilton's Silverstone qualifying lap coloured by driving state: braking, cornering, accelerating, coasting">
     </div>
   </div>
 </section>
 
 <section class="detail-section">
   <div class="wrap">
-    <h2>Overview &amp; Mathematical Framework</h2>
+    <h2>Overview &amp; Analytical Framework</h2>
     <div class="body">
-      <p>This project evaluates dynamic vehicle limits by processing multi-channel telemetry metrics including speed, longitudinal acceleration, lateral acceleration, throttle position, and brake pressure. By modeling total normal force ($N = mg + L$) relative to tire friction boundaries ($\mu = 1.8$), we isolate pure aerodynamic downforce contributions from static mass effects.</p>
+      <p>Every number in this pipeline comes straight from FastF1 telemetry or a simple threshold applied to it &mdash; there's no clustering, no fitted model, and no assumed car parameters (mass, downforce, tyre friction). Raw speed, throttle, brake and position channels are resampled onto a uniform 10&nbsp;Hz time grid and smoothed with a Savitzky&ndash;Golay filter before differentiating, which keeps the acceleration signals from blowing up on near-duplicate telemetry timestamps.</p>
 
-      <!-- Math Derivation Callout Block -->
       <div class="math-block">
-        <p><b>1. Vectorized Acceleration Magnitude:</b> $a_{\text{total}} = \sqrt{a_x^2 + a_y^2}$</p>
-        <p><b>2. Normal Force Balance:</b> $F_{\text{max}} = \mu N = \mu \left(m g + \frac{1}{2} \rho V^2 S C_L\right)$</p>
-        <p><b>3. Limit Balance Equivalence:</b> $m a_{\text{total}} = F_{\text{max}}$</p>
-        <p class="eq-highlight"><b>Governing $C_L$ Equation:</b> $C_L = \frac{2m}{\rho S V^2} \left( \frac{\sqrt{a_x^2 + a_y^2}}{\mu} - g \right)$</p>
+        <p><b>1. Longitudinal acceleration:</b> $a_{long} = \dfrac{d}{dt}\,v_{smooth}(t)$</p>
+        <p><b>2. Path curvature (from smoothed x, y):</b> $\kappa = \dfrac{x'y'' - y'x''}{(x'^2 + y'^2)^{1.5}}$</p>
+        <p><b>3. Lateral acceleration:</b> $a_{lat} = v^2 \kappa$</p>
+        <p class="eq-highlight">State priority: Brake % &gt; 5 &rarr; <b>Braking</b>; elif |a_lat| &gt; 0.3g &rarr; <b>Cornering</b>; elif Throttle % &gt; 50 &rarr; <b>Accelerating</b>; else <b>Coasting</b></p>
       </div>
 
-      <p>Data points are filtered across power-saturated straightaways and transient shifting events to guarantee downforce estimation ($C_L$) occurs strictly when the chassis operates at the tire traction limit.</p>
+      <p>The priority ordering matters: trail-braking into a corner still reads as <i>Braking</i> even though lateral g is already climbing, because brake pressure is checked first. Both accelerations are clipped at &plusmn;8g as a backstop against residual differentiation noise, not because that limit reflects anything physical about the car.</p>
     </div>
   </div>
 </section>
@@ -99,75 +116,83 @@
   <div class="wrap">
     <h2>Methodology &amp; Implementation</h2>
     <div class="body" style="margin-bottom:36px;">
-      <p>The Python analytical pipeline processes raw lap telemetry to segment dynamic performance envelopes, derive lift coefficients, and quantify trajectory deltas.</p>
+      <p>The pipeline pulls two laps via FastF1, builds a kinematic working dataframe for each, then aligns them on distance to read off exactly where time was won or lost.</p>
     </div>
 
     <div class="story">
 
-      <!-- Story Block 1: Telemetry Channels -->
-      <div class="story-block reverse">
-        <div class="story-media fit-content">
-          <img src="../images/RE/telemetry.png" alt="Multi-channel telemetry traces over lap distance including speed, longitudinal and lateral g-forces, throttle, and brake inputs">
-        </div>
-        <div class="story-text">
-          <p><b>Multi-Channel Telemetry Ingestion</b></p>
-          <ul>
-            <li>Processed time-series channels across a 5,000m lap, synchronizing vehicle speed, $a_x$, $a_y$, throttle position, brake pressure, steering angle, and DRS actuation.</li>
-            <li>Applied signal filtering to eliminate transient sensor noise and shifting artifacts prior to calculating dynamic force vectors.</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Story Block 2: Code Snippet & Aero Limit Isolation -->
+      <!-- Story Block 1: Code Snippet & State Classification -->
       <div class="story-block">
         <div class="story-media fit-content">
-          <pre class="code-snippet"><code><span class="com"># Calculate dynamic aerodynamic lift coefficient (CL)</span>
-mp[<span class="str">'CL'</span>] = (
-    ((<span class="num">2</span> * carMass) / (rho * frontArea * mp[<span class="str">'speed'</span>]**<span class="num">2</span>)) * 
-    ((np.sqrt(mp[<span class="str">'longAcc'</span>]**<span class="num">2</span> + mp[<span class="str">'latAcc'</span>]**<span class="num">2</span>) / mu) - g)
-)
+          <pre class="code-snippet"><code><span class="com"># Classify each sample by driving state - fixed thresholds, no ML</span>
+<span class="kw">def</span> classify_state(mp):
+    braking = mp[<span class="str">'brake'</span>] > BRAKE_THRESHOLD
+    cornering = (~braking) & (mp[<span class="str">'latAcc'</span>].abs() > LAT_ACC_THRESHOLD)
+    accelerating = (~braking) & (~cornering) & (mp[<span class="str">'throttle'</span>] > THROTTLE_THRESHOLD)
 
-<span class="com"># Isolate true grip-limited peak downforce</span>
-maxCL = mp[<span class="str">'CL'</span>].max()
-print(f<span class="str">"Maximum downforce coefficient: {maxCL:.2f}"</span>)</code></pre>
+    state = pd.Series(<span class="str">'Coasting'</span>, index=mp.index)
+    state[accelerating] = <span class="str">'Accelerating'</span>
+    state[cornering] = <span class="str">'Cornering'</span>
+    state[braking] = <span class="str">'Braking'</span>
+    <span class="kw">return</span> state</code></pre>
         </div>
         <div class="story-text">
-          <p><b>Aerodynamic Limit Isolation</b></p>
+          <p><b>Driving-State Classification</b></p>
           <ul>
-            <li>Vectorized NumPy transformations evaluate dynamic pressure ($q = \frac{1}{2}\rho V^2$) and vehicle load balance at scale.</li>
-            <li>Isolated maximum downforce values strictly within traction-bound corners and braking zones.</li>
+            <li>Every 10&nbsp;Hz sample is tagged Braking / Cornering / Accelerating / Coasting purely from cut-offs on brake %, lateral g, and throttle %, checked in that priority order.</li>
+            <li>No fitting, no clustering &mdash; just thresholds on channels that are either raw telemetry or a direct kinematic derivative of it.</li>
           </ul>
         </div>
       </div>
 
-      <!-- Story Block 3: GG Plot & Visual Regimes -->
+      <!-- Story Block 2: State Track Map -->
       <div class="story-block reverse">
         <div class="story-media fit-content">
-          <img src="../images/RE/gg.png" alt="GG Diagrams showing power-limited vs grip-limited acceleration domains against the baseline friction boundary">
+          <img src="../images/RE/BOT_states.png" alt="Bottas's Silverstone qualifying lap coloured by driving state, showing braking, cornering, accelerating and coasting zones around the circuit">
         </div>
         <div class="story-text">
-          <p><b>GG Friction Circle Expansion</b></p>
+          <p><b>Per-Driver State Track Maps</b></p>
           <ul>
-            <li>Mapped combined lateral and longitudinal g-forces against the static friction boundary ($\mu = 1.8$). High-speed braking zones reach up to ~4–5g, directly demonstrating aero downforce scaling.</li>
-            <li>Separated telemetry points into distinct domains: <i>Power-Limited</i> (engine output bounds acceleration) and <i>Grip-Limited</i> (tire traction bounds performance).</li>
+            <li>Each classified lap is drawn back onto the circuit as a continuous, colour-segmented line, so the state sequence reads as a single trace rather than a scatter of gapped points at high speed.</li>
+            <li>On a fast circuit like Silverstone the map comes out mostly blue and green, with red braking confined to just a handful of corners &mdash; a sanity check that the thresholds are doing something sensible before trusting the delta analysis built on top of them.</li>
           </ul>
+          <div class="state-legend">
+            <span><i style="background:#D62728"></i>Braking</span>
+            <span><i style="background:#2CA02C"></i>Cornering</span>
+            <span><i style="background:#1F77B4"></i>Accelerating</span>
+            <span><i style="background:#7F7F7F"></i>Coasting</span>
+          </div>
         </div>
       </div>
 
-      <!-- Story Block 4: Power Curve & Spatial Tracking -->
+      <!-- Story Block 3: Delta plot -->
       <div class="story-block">
         <div class="story-media fit-content">
-          <img src="../images/RE/power-curve.png" alt="Power vs Speed Curve showing global power envelope and traction-limited data scatter">
+          <img src="../images/RE/delta.png" alt="Cumulative time delta between Hamilton and Bottas around the lap, plus a track map coloured by which driver was faster at each point">
         </div>
         <div class="story-text">
-          <p><b>Power vs. Speed Envelope &amp; Spatial Tracking</b></p>
+          <p><b>Distance Alignment &amp; Cumulative Delta</b></p>
           <ul>
-            <li>Evaluated engine saturation thresholds across vehicle velocity ranges to confirm straightaway power limits versus cornering grip limits.</li>
-            <li>Reconstructed full spatial circuit geometry (using integrated telemetry velocity vectors) to compare dead-reckoned track trajectories against GPS coordinates.</li>
+            <li>Both laps' time-vs-distance curves are interpolated onto a common 5&nbsp;m grid; the cumulative delta at each point is simply <code>timeB &minus; timeA</code>, so the trace shows exactly who is ahead, and by how much, at every metre of the lap.</li>
+            <li>A Savitzky&ndash;Golay-smoothed gradient of that delta gives the local rate of gain or loss, which is then grouped into contiguous same-sign stretches (minimum 15&nbsp;m) and ranked by time gained &mdash; the raw material for the section-by-section report.</li>
           </ul>
         </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Automated Coaching Notes</h2>
+    <div class="body">
+      <p>For the largest time-gain segments, the script pulls the handful of directly observable facts within that stretch &mdash; each driver's minimum (apex) speed, where braking starts, where full throttle resumes &mdash; and turns "X was faster here" into something a driver can actually act on. A console report lists the top sections in order, each with the underlying differences that cleared a minimum threshold (&plusmn;3&nbsp;km/h corner speed, &plusmn;3&nbsp;m on brake or throttle points), and falls back to a "smoother, more consistent line" note when no single measurement stands out.</p>
+      <div class="math-block">
+        <p>BOT&nbsp;+0.xxx s&nbsp;&nbsp; dist&nbsp;xxxx&ndash;xxxx m&nbsp;&nbsp;(during Cornering)</p>
+        <p class="eq-highlight">&rarr; HAM: try to carry more corner speed; brake later; get to full throttle sooner (like BOT did here).</p>
+      </div>
+      <p>Every clause in that sentence is conditional on real telemetry evidence for that exact stretch &mdash; nothing is templated in if the numbers don't support it.</p>
     </div>
   </div>
 </section>
@@ -177,24 +202,23 @@ print(f<span class="str">"Maximum downforce coefficient: {maxCL:.2f}"</span>)</c
     <h2>Results &amp; Future Development</h2>
     <div class="story">
 
-      <!-- Story Block 5: Summary & Circuit Layout -->
       <div class="story-block reverse">
-        <div class="story-media fit-content">
-          <img src="../images/RE/circuit.png" alt="Reconstructed spatial circuit layout from telemetry channel integration">
+        <div class="story-text">
+          <p>Run on Hamilton vs Bottas' 2019 British GP Q3 laps, the cumulative delta trace shows Hamilton opening a lead of over three tenths within the first kilometre out of Turn 1, before Bottas clawed almost all of it back across the long middle sector, pulling to within a tenth by half-distance. Hamilton edged back ahead in the closing sector for a wafer-thin margin at the flag &mdash; the kind of see-saw pattern a single lap-time gap completely hides, and exactly what the distance-aligned view is built to expose.</p>
         </div>
         <div class="story-text">
-          <p>The aerodynamic limit model effectively separates engine power constraints from tire traction limits, showing clear GG circle expansion beyond the static $\mu = 1.8$ threshold under high-speed dynamic loads. Reconstructing spatial circuit coordinates from velocity telemetry revealed localized positional drift during trail-braking entry phases.</p>
+          <p>Future work: extending the state classifier with named-corner annotations so the coaching notes read "into Village" rather than a raw distance range; averaging the segment analysis across a full stint instead of a single lap pair to separate one-off scruffy corners from a driver's consistent weak points; and an interactive HTML version (Plotly) with hover tooltips linking each delta-plot feature straight to its telemetry trace.</p>
         </div>
       </div>
 
-      <!-- Side-by-Side Media Block -->
+      <!-- Side-by-side state map comparison -->
       <div class="story-block">
         <div class="story-media two-up">
-          <img src="../images/RE/limited-circuit.png" alt="Circuit layout segmented by grip-limited cornering zones and power-limited acceleration zones">
-          <img src="../images/RE/power-curve.png" alt="Power vs speed curve envelope plot">
+          <img src="../images/RE/ham-states.png" alt="Hamilton's driving-state track map">
+          <img src="../images/RE/bot-states.png" alt="Bottas's driving-state track map">
         </div>
         <div class="story-text">
-          <p>Future work involves adapting the pipeline to ingest live <code>FastF1</code> data feeds, adding suspension potentiometer channels for pitch/roll dynamic downforce mapping, and implementing a Kalman Filter to eliminate telemetry integration drift against real-time GPS coordinates.</p>
+          <p>Placed side by side, the two drivers' state maps line up almost corner-for-corner &mdash; expected for team-mates on the same car &mdash; which makes the handful of places they diverge (a slightly earlier brake point, a touch more coasting into one corner) exactly where the cumulative delta trace above shows time actually changing hands.</p>
         </div>
       </div>
 
