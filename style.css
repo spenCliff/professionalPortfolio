@@ -256,6 +256,12 @@ header.site{
   gap:36px;
   align-items:center;
 }
+.story-block:has(.story-media.two-up){
+  grid-template-columns: 2fr 1fr;
+}
+.story-block.reverse:has(.story-media.two-up){
+  grid-template-columns: 1fr 2fr;
+}
 .story-block.reverse > .story-media{ order:2; }
 .story-block.reverse > .story-text{ order:1; }
 

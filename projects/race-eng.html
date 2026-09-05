@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Distance-Aligned Lap Comparison &amp; Driving-State Analysis</title>
+<title>Distance-Aligned Lap Comparison & Driving-State Analysis | Spencer Clifford</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,10 +22,11 @@
   }
   .math-block p { margin: 4px 0; }
   .math-block .eq-highlight {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--accent);
-    margin-top: 8px;
+    margin-top: 10px;
+    display: block;
   }
 
   pre.code-snippet {
@@ -35,12 +36,12 @@
     border-radius: var(--radius);
     overflow-x: auto;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 12.5px;
+    font-size: 13px;
     line-height: 1.5;
     margin: 0;
     border: 1px solid var(--line);
   }
-  pre.code-snippet code { font-family: inherit; }
+  
   .kw { color: #569cd6; }
   .com { color: #6a9955; }
   .str { color: #ce9178; }
@@ -63,6 +64,15 @@
   .state-legend i {
     width: 12px; height: 12px; border-radius: 2px; display: inline-block;
   }
+
+  ul.scannable-list {
+    margin: 12px 0 20px 20px;
+    padding: 0;
+  }
+  ul.scannable-list li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
 </style>
 </head>
 <body>
@@ -80,7 +90,7 @@
 <section class="project-hero">
   <div class="wrap">
     <a class="back-link" href="../index.html">← All projects</a>
-    <h1>Distance-Aligned Lap Comparison &amp; Driving-State Analysis</h1>
+    <h1>Lap Comparison & Driving-State Analysis Tool</h1>
     <div class="tags">
       <span class="tag">FastF1</span>
       <span class="tag">Python</span>
@@ -88,7 +98,15 @@
     </div>
 
     <div class="hero-flex">
-      <p class="lede">A telemetry pipeline that aligns two F1 laps onto a common distance axis, tracks the cumulative time delta between them metre by metre, and auto-generates plain-English coaching notes on exactly where and how one driver gained &mdash; later braking, more corner speed, or an earlier return to throttle.</p>
+      <div class="lede">
+        <p>A Python CLI tool for analysing and comparing Formula 1 telemetry.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul class="scannable-list">
+          <li>Classifies driving states (braking, cornering, accelerating, coasting).</li>
+          <li>Maps telemetry directly to specific track corners.</li>
+          <li>Cross-examines driver laps to automatically generate actionable coaching insights and improve lap times.</li>
+        </ul>
+      </div>
       <img class="hero-diagram" src="../images/RE/HAM_states.png" alt="Hamilton's Silverstone qualifying lap coloured by driving state: braking, cornering, accelerating, coasting">
     </div>
   </div>
@@ -96,35 +114,37 @@
 
 <section class="detail-section">
   <div class="wrap">
-    <h2>Overview &amp; Analytical Framework</h2>
+    <h2>Analytical Framework</h2>
     <div class="body">
-      <p>Every number in this pipeline comes straight from FastF1 telemetry or a simple threshold applied to it &mdash; there's no clustering, no fitted model, and no assumed car parameters (mass, downforce, tyre friction). Raw speed, throttle, brake and position channels are resampled onto a uniform 10&nbsp;Hz time grid and smoothed with a Savitzky&ndash;Golay filter before differentiating, which keeps the acceleration signals from blowing up on near-duplicate telemetry timestamps.</p>
-
-      <div class="math-block">
-        <p><b>1. Longitudinal acceleration:</b> $a_{long} = \dfrac{d}{dt}\,v_{smooth}(t)$</p>
-        <p><b>2. Path curvature (from smoothed x, y):</b> $\kappa = \dfrac{x'y'' - y'x''}{(x'^2 + y'^2)^{1.5}}$</p>
-        <p><b>3. Lateral acceleration:</b> $a_{lat} = v^2 \kappa$</p>
-        <p class="eq-highlight">State priority: Brake % &gt; 5 &rarr; <b>Braking</b>; elif |a_lat| &gt; 0.3g &rarr; <b>Cornering</b>; elif Throttle % &gt; 50 &rarr; <b>Accelerating</b>; else <b>Coasting</b></p>
-      </div>
-
-      <p>The priority ordering matters: trail-braking into a corner still reads as <i>Braking</i> even though lateral g is already climbing, because brake pressure is checked first. Both accelerations are clipped at &plusmn;8g as a backstop against residual differentiation noise, not because that limit reflects anything physical about the car.</p>
+      <ul class="scannable-list">
+        <li><strong>Signal Processing:</strong> Speed, throttle, brake, and position are resampled to a 10 Hz grid and smoothed via a Savitzky-Golay filter to prevent acceleration spikes.</li>
+        <li><strong>Kinematics:</strong> Lateral acceleration is derived from signed path curvature as a substitute for the steering channel.</li>
+        <li><strong>Fail-Safes:</strong> Accelerations are clipped at ±8g as a backstop against residual differentiation noise.</li>
+      </ul>
     </div>
   </div>
 </section>
 
 <section class="detail-section">
   <div class="wrap">
-    <h2>Methodology &amp; Implementation</h2>
-    <div class="body" style="margin-bottom:36px;">
-      <p>The pipeline pulls two laps via FastF1, builds a kinematic working dataframe for each, then aligns them on distance to read off exactly where time was won or lost.</p>
-    </div>
+    <h2>Implementation</h2>
 
     <div class="story">
-
-      <!-- Story Block 1: Code Snippet & State Classification -->
+      <!-- Processing -->
       <div class="story-block">
+        <div class="story-media">
+          <img src="../images/RE/telemetry.png" alt="Raw and derived telemetry channels: time, speed, longitudinal and lateral acceleration, throttle, brake and DRS">
+        </div>
+        <div class="story-text">
+          <p><strong>1. Data Processing</strong></p>
+          <p>The pipeline begins by extracting time, speed, throttle, brake, and DRS data directly from FastF1. All of these metrics are then aligned by distance, and acceleration profiles are derived using speed and track positioning.</p>
+        </div>
+      </div>
+
+      <!-- State Logic -->
+      <div class="story-block reverse">
         <div class="story-media fit-content">
-          <pre class="code-snippet"><code><span class="com"># Classify each sample by driving state - fixed thresholds, no ML</span>
+          <pre class="code-snippet"><code><span class="com"></span>
 <span class="kw">def</span> classify_state(mp):
     braking = mp[<span class="str">'brake'</span>] > BRAKE_THRESHOLD
     cornering = (~braking) & (mp[<span class="str">'latAcc'</span>].abs() > LAT_ACC_THRESHOLD)
@@ -137,25 +157,19 @@
     <span class="kw">return</span> state</code></pre>
         </div>
         <div class="story-text">
-          <p><b>Driving-State Classification</b></p>
-          <ul>
-            <li>Every 10&nbsp;Hz sample is tagged Braking / Cornering / Accelerating / Coasting purely from cut-offs on brake %, lateral g, and throttle %, checked in that priority order.</li>
-            <li>No fitting, no clustering &mdash; just thresholds on channels that are either raw telemetry or a direct kinematic derivative of it.</li>
-          </ul>
+          <p><strong>2. Driving-State Classification</strong></p>
+          <p>The tool assigns a driving state to every sample using priority-based cut-offs. By evaluating brake pressure first, complex driver inputs like trail-braking deep into an apex are correctly identified as "Braking" rather than "Cornering".</p>
         </div>
       </div>
 
-      <!-- Story Block 2: State Track Map -->
-      <div class="story-block reverse">
+      <!-- Corner Mapping -->
+      <div class="story-block">
         <div class="story-media fit-content">
-          <img src="../images/RE/BOT_states.png" alt="Bottas's Silverstone qualifying lap coloured by driving state, showing braking, cornering, accelerating and coasting zones around the circuit">
+          <img src="../images/RE/BOT_states.png" alt="Bottas's Silverstone qualifying lap coloured by driving state, with numbered corner markers">
         </div>
         <div class="story-text">
-          <p><b>Per-Driver State Track Maps</b></p>
-          <ul>
-            <li>Each classified lap is drawn back onto the circuit as a continuous, colour-segmented line, so the state sequence reads as a single trace rather than a scatter of gapped points at high speed.</li>
-            <li>On a fast circuit like Silverstone the map comes out mostly blue and green, with red braking confined to just a handful of corners &mdash; a sanity check that the thresholds are doing something sensible before trusting the delta analysis built on top of them.</li>
-          </ul>
+          <p><strong>3. Corner Identification</strong></p>
+          <p>Lateral acceleration is translated into mapped corners, bridging any straight gaps under 15m and numbering them sequentially from Turn 1. This process is kept entirely independent of the state labels, ensuring that braking and exit zones remain anchored to a single corner.</p>
           <div class="state-legend">
             <span><i style="background:#D62728"></i>Braking</span>
             <span><i style="background:#2CA02C"></i>Cornering</span>
@@ -165,60 +179,46 @@
         </div>
       </div>
 
-      <!-- Story Block 3: Delta plot -->
+      <!-- Delta Calculation -->
+      <div class="story-block reverse">
+        <div class="story-media fit-content">
+          <img src="../images/RE/delta.png" alt="Cumulative time delta between two drivers around the lap">
+        </div>
+        <div class="story-text">
+          <p><strong>4. Distance Alignment & Delta</strong></p>
+          <p>To compare laps, both time-versus-distance curves are interpolated onto a common 5m grid. The smoothed delta gradients are then grouped into contiguous gain or loss segments of at least 15m to filter out any sample-by-sample noise.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <div class="wrap">
+    <h2>Automated Coaching Insights</h2>
+    <div class="story">
+      
+      <!-- Block 1: Macro-Level Gains Mapping -->
       <div class="story-block">
         <div class="story-media fit-content">
-          <img src="../images/RE/delta.png" alt="Cumulative time delta between Hamilton and Bottas around the lap, plus a track map coloured by which driver was faster at each point">
+          <img src="../images/RE/gains_map.png" alt="Track map coloured by which driver was faster at each point around the lap">
         </div>
         <div class="story-text">
-          <p><b>Distance Alignment &amp; Cumulative Delta</b></p>
-          <ul>
-            <li>Both laps' time-vs-distance curves are interpolated onto a common 5&nbsp;m grid; the cumulative delta at each point is simply <code>timeB &minus; timeA</code>, so the trace shows exactly who is ahead, and by how much, at every metre of the lap.</li>
-            <li>A Savitzky&ndash;Golay-smoothed gradient of that delta gives the local rate of gain or loss, which is then grouped into contiguous same-sign stretches (minimum 15&nbsp;m) and ranked by time gained &mdash; the raw material for the section-by-section report.</li>
-          </ul>
+          <p><strong>Macro-Level Gains Mapping</strong></p>
+          <p>These time-delta segments are superimposed back onto the circuit map. This provides an instant strategic overview of exactly where a lap was won or lost before needing to dive into the apex-level data.</p>
         </div>
       </div>
 
-    </div>
-  </div>
-</section>
-
-<section class="detail-section">
-  <div class="wrap">
-    <h2>Automated Coaching Notes</h2>
-    <div class="body">
-      <p>For the largest time-gain segments, the script pulls the handful of directly observable facts within that stretch &mdash; each driver's minimum (apex) speed, where braking starts, where full throttle resumes &mdash; and turns "X was faster here" into something a driver can actually act on. A console report lists the top sections in order, each with the underlying differences that cleared a minimum threshold (&plusmn;3&nbsp;km/h corner speed, &plusmn;3&nbsp;m on brake or throttle points), and falls back to a "smoother, more consistent line" note when no single measurement stands out.</p>
-      <div class="math-block">
-        <p>BOT&nbsp;+0.xxx s&nbsp;&nbsp; dist&nbsp;xxxx&ndash;xxxx m&nbsp;&nbsp;(during Cornering)</p>
-        <p class="eq-highlight">&rarr; HAM: try to carry more corner speed; brake later; get to full throttle sooner (like BOT did here).</p>
-      </div>
-      <p>Every clause in that sentence is conditional on real telemetry evidence for that exact stretch &mdash; nothing is templated in if the numbers don't support it.</p>
-    </div>
-  </div>
-</section>
-
-<section class="detail-section">
-  <div class="wrap">
-    <h2>Results &amp; Future Development</h2>
-    <div class="story">
-
+      <!-- Block 2: Actionable Coaching Notes -->
       <div class="story-block reverse">
-        <div class="story-text">
-          <p>Run on Hamilton vs Bottas' 2019 British GP Q3 laps, the cumulative delta trace shows Hamilton opening a lead of over three tenths within the first kilometre out of Turn 1, before Bottas clawed almost all of it back across the long middle sector, pulling to within a tenth by half-distance. Hamilton edged back ahead in the closing sector for a wafer-thin margin at the flag &mdash; the kind of see-saw pattern a single lap-time gap completely hides, and exactly what the distance-aligned view is built to expose.</p>
-        </div>
-        <div class="story-text">
-          <p>Future work: extending the state classifier with named-corner annotations so the coaching notes read "into Village" rather than a raw distance range; averaging the segment analysis across a full stint instead of a single lap pair to separate one-off scruffy corners from a driver's consistent weak points; and an interactive HTML version (Plotly) with hover tooltips linking each delta-plot feature straight to its telemetry trace.</p>
-        </div>
-      </div>
-
-      <!-- Side-by-side state map comparison -->
-      <div class="story-block">
-        <div class="story-media two-up">
-          <img src="../images/RE/ham-states.png" alt="Hamilton's driving-state track map">
-          <img src="../images/RE/bot-states.png" alt="Bottas's driving-state track map">
-        </div>
-        <div class="story-text">
-          <p>Placed side by side, the two drivers' state maps line up almost corner-for-corner &mdash; expected for team-mates on the same car &mdash; which makes the handful of places they diverge (a slightly earlier brake point, a touch more coasting into one corner) exactly where the cumulative delta trace above shows time actually changing hands.</p>
+        <div class="story-text" style="max-width:none;">
+          <p><strong>Coaching Notes</strong></p>
+          <p>For every gain segment, the tool audits key telemetry drivers such as minimum apex speed, initial braking distance, and throttle application. Any minor variances under 3 km/h or 3m are automatically rejected as noise to keep the feedback focused.</p>
+          <div class="math-block" style="border-left-color: #2CA02C; margin-top: 10px;">
+            <p style="color: var(--ink-soft); font-size: 13px;">Example Output:</p>
+            <p><code>BOT +0.xxx s &nbsp;Turn 9 (Right-hander) &nbsp;(during Cornering)</code></p>
+            <span class="eq-highlight">&rarr; HAM: try to carry more corner speed; brake later; get to full throttle sooner.</span>
+          </div>
         </div>
       </div>
 

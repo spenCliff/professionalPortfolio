@@ -34,8 +34,8 @@
     </div>
 
     <div class="hero-flex">
-      <p class="lede">Modelled transient FSI behaviour of a front wing to characterise structural deflection under varying aerodynamic loads across a straight-line acceleration/deceleration cycle.</p>
-      <img class="hero-diagram" src="../images/[hero-image.jpg]" alt="[Hero image description]">
+      <p class="lede"> This project demonstrates how the transient aeroelastic behaviour of a front wing can influence its aerodynamic characteristics.</p>
+      <img class="hero-diagram" src="../images/FSI/FSI_cover3.png" alt="CFD visualization of a Formula 1 front wing under aerodynamic load">
     </div>
   </div>
 </section>
@@ -44,15 +44,16 @@
   <div class="wrap">
     <h2>Overview</h2>
     <div class="body">
-      <p>The aim of this project was to investigate the aeroelastic behaviour of a front wing during an acceleration and deceleration cycle.</p>
-      <p>Telemetry data from Kimi Antonelli’s pole lap at Silverstone was used to reconstruct an approximate vehicle velocity profile along the Hangar Straight, providing the transient aerodynamic loading for the simulation.</p>
+      <p>My theory is that front wings are deliberately made flexible to reduce lift-induced drag at high speeds, and increase grip at the front on lower speed corners for faster turn-in.</p>
+      <p>The aim of this project was to investigate how aeroelastic behaviour affects loading of a front wing during an acceleration and deceleration cycle.</p>
+      <p>Representative orthotropic properties were adopted for an equivalent CFRP laminate, with directional stiffness selected to approximate the behaviour of a high-performance composite wing structure.</p>
     </div>
   </div>
 </section>
 
 <section class="detail-section">
   <div class="wrap">
-    <h2>What I Did</h2>
+    <h2>Methodology</h2>
     <div class="body" style="margin-bottom:36px;">
       <p>The simplified structural material model and isolated aerodynamic geometry mean the results are intended to demonstrate aeroelastic behaviour and FSI methodology rather than predict the deformation of a specific physical Formula 1 front wing.</p>
       <p>The following assumptions were therefore adopted:</p>
@@ -60,7 +61,6 @@
           <li>Incompressible flow,</li>
           <li><i>k</i>–ω SST RANS turbulence model,</li>
           <li>Linear elastic structural behaviour,</li>
-          <li>Simplified shell-based structural representation,</li>
           <li>Isolated front wing geometry,</li>
           <li>Moving ground plane.</li>
         </ul>
@@ -69,47 +69,42 @@
 
     <div class="story">
 
-      <!-- Story Block 1 (Image Right) -->
+      <!-- Story Block 1 (Image Right - Stacked Meshes) -->
 
       <div class="story-block reverse">
         <div class="story-media fit-content">
-          <img src="../images/[step-1-image.png]" alt="[Image description]">
+          <!-- Stack your two mesh images here -->
+          <img src="../images/FSI/fluidMesh.png" alt="Tetrahedral fluid domain mesh highlighting refinement regions">
         </div>
         <div class="story-text">
           <p><b>Simulation Setup</b></p>
-            <ul> 
-              <li>Mesh refinement.</li>
-              <li>Shell-based structural model.</li>
-              <li>Two-way FSI coupling</li>
-            </ul>
+          <p>Tetrahedral meshes were generated across both the fluid and solid domains to facilitate consistent node-to-face mapping at the decoupled fluid-structure interfaces.</p>
+          <p>Targeted surface and volumetric controls refined the fluid mesh in critical high-gradient regions, notably along the leading and trailing edges, flap slot gaps, and endplate vortex shedding paths.</p>
+          <p>Domain and mesh sensitivity studies were conducted to ensure solution independence from spatial resolution and boundary blockage effects.</p>
+          <p>Structurally, the nosecone mounting interface was constrained with fixed boundary conditions, while all aerodynamic surfaces remained unconstrained to capture dynamic elastic deflection.</p>
         </div>
       </div>
 
 
       <div class="story-block">
         <div class="story-media fit-content">
-          <img src="../images/[step-1-image.png]" alt="[Image description]">
+          <img src="../images/FSI/fig_fsi_inlet_velocity_vs_time.png" alt="Graph showing the dynamic acceleration profile of inlet velocity versus time">
         </div>
         <div class="story-text">
           <p><b>Transient Loading</b></p>
-            <ul> 
-              <li>Transient velocity profile.</li>
-              <li>Moving ground plane.</li>
-            </ul>
+          <p>Transient aerodynamic loading was derived from telemetry of Kimi Antonelli’s 2026 Silverstone pole lap, reconstructing the dynamic acceleration profile along the Hangar Straight.</p>
+          <p>The extracted velocity trace was formatted and mapped into STAR-CCM+ via a time-dependent CSV table to drive both the inlet boundary condition and the moving ground plane.</p>
         </div>
       </div>
 
-      <!-- Story Block 2 (Image Left) -->
       <div class="story-block reverse">
-        <div class="story-media">
-          <img src="../images/[step-2-image.png]" alt="[Image description]">
+        <div class="story-media fit-content reverse">
+          <img src="../images/FSI/StreamlineAnimation.gif" alt="Velocity streamlines illustrating the initial domain settling period">
         </div>
         <div class="story-text">
-          <p><b>Preconditioning</b></p>
-            <ul> 
-              <li>The wing was preconditioned using a constant inlet velocity of 6.9 m/s for 4.5 seconds, corresponding to approximately 4.5 fluid-through times.</li>
-              <li>This initialisation period allowed the structural response to settle before the transient velocity profile was applied. Rayleigh damping was also introduced to dissipate residual structural oscillations and improve the stability of the coupled FSI solution.</li>
-            </ul>
+          <p><b>Flow Preconditioning</b></p>
+          <p>Unconditioned startup transients are demonstrated here, illustrating the initial domain settling period.</p>
+          <p>To eliminate startup initialisation artefacts from the aeroelastic data, the final methodology incorporated a 3.0-second initialisation period (corresponding to three domain flow-through times) to establish a statistically steady flow field before dynamic coupling.</p>
         </div>
       </div>
 
@@ -122,28 +117,60 @@
     <h2>Results &amp; Reflections</h2>
     <div class="story">
 
-      <!-- Story Block 3 (Results) -->
       <div class="story-block reverse">
         <div class="story-media fit-content">
-          <img src="../images/[results-image.jpg]" alt="[Results image description]">
+          <img src="../images/FSI/DisplacementAnimation3.gif" alt="Animation demonstrating the structural displacement of the front wing">
         </div>
         <div class="story-text">
           <p><b>Aeroelastic Response</b></p>
-          <p>Wing deformation.</p>
+          <p>As dynamic pressure increases, the outboard wing elements visibly deflect and twist, effectively reducing the local angle of attack. This animation uses a vector warp to exaggerate the deformation by a factor of 10, clearly highlighting the aeroelastic washout that drives the load-shedding behaviour.</p>
         </div>
       </div>
 
-      <!-- Side-by-Side Comparison Media Block -->
       <div class="story-block">
+        <div class="story-media fit-content">
+          <img src="../images/FSI/fig_fsi_displacement_vs_time.png" alt="Graph plotting wing tip displacement components and magnitude versus time">
+        </div>
+        <div class="story-text">
+          <p>Wing tip displacement closely tracks the velocity ramp, scaling predictably with dynamic pressure (∝ V²).</p>
+            <ul class="scannable-list">
+              <li><strong>Peak Loading:</strong> Displacement rises to ~14.4 mm as inlet velocity peaks at 86 m/s, with a slight lag during deceleration due to structural inertia.</li>
+              <li><strong>Dynamic Excitation:</strong> High-frequency oscillations riding on the main trend suggest that unsteady aerodynamic loads are exciting a structural mode.</li>
+              <li><strong>Measurement Note:</strong> The reported peak magnitude represents the absolute maximum displacement across the entire wing, rather than a single co-located probe, explaining why it differs from the vector sum of the individual directional axes.</li>
+            </ul>
+        </div>
+      </div>
+
+      <div class="story-block reverse">
+        <div class="story-media fit-content reverse">
+          <img src="../images/FSI/PressureAnimation.gif" alt="Pressure contour animation on the suction surface of the wing elements">
+        </div>
+        <div class="story-text">
+          <p>This pressure animation reveals the aerodynamic mechanism driving the wing vibration. Unsteady flow structures on the suction surface of the second element induce oscillating aerodynamic loads, which directly cause the observed structural displacement.</p>
+        </div>
+      </div>
+
+      <div class="story-block reverse">
         <div class="story-media two-up">
-          <img src="../images/[comparison-1.jpg]" alt="[Comparison 1 description]">
-          <img src="../images/[comparison-2.jpg]" alt="[Comparison 2 description]">
+          <img src="../images/FSI/fig_downforce_vs_velocity.png" alt="Graph comparing downforce generation between rigid and deformable wings">
+          <img src="../images/FSI/fig_drag_vs_velocity.png" alt="Graph comparing drag generation between rigid and deformable wings">
         </div>
         <div class="story-text">
           <p><b>Rigid vs Deformable Comparison</b></p>
-          <p>Force and velocity plots?</p>
+          <p>An identical transient simulation was conducted with a non-deforming mesh to test the extents of the aeroelastic effect.</p>
+          <p>The FSI results directly support the initial hypothesis, demonstrating how aeroelasticity acts as a passive aerodynamic optimisation system. At lower velocities, the deformable wing predictions closely align with the rigid baseline. This indicates that the wing retains its structural stiffness at low speeds, preserving essential downforce and front-end grip for faster turn-in.</p>
         </div>
       </div>
+
+      <div class="story-block">
+        <div class="story-media fit-content">
+          <img src="../images/FSI/fig_pct_difference_vs_velocity.png" alt="Graph showing the percentage difference in forces due to the aeroelastic effect">
+        </div>
+        <div class="story-text">
+          <p>As velocity increases down the straight, dynamic pressure forces the wing to deflect. At the maximum simulated velocities, this aeroelastic "washout" sheds approximately 2-4% of downforce and 2-3% of drag relative to a rigid structure. Shedding downforce at high speeds is a highly beneficial trade-off to simultaneously shed lift-induced drag, ultimately increasing top speed without compromising low-speed cornering performance.</p>
+        </div>
+      </div>
+
 
     </div>
   </div>

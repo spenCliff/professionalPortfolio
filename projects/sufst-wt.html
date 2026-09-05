@@ -32,7 +32,7 @@
     </div>
 
     <div class="hero-flex">
-      <p class="lede">Led CFD validation against a 50% scale Formula Student wind-tunnel campaign, combining force measurements, pressure tappings and flow visualisation to assess and improve simulation fidelity.</p>
+      <p class="lede">Our 50% scale vehicle was tested across a range of operating conditions using force-balance measurements, surface pressure tappings, and flow visualisation to assess the accuracy of our CFD setup.</p>
       <img class="hero-diagram" src="../images/WT/wt-cover-2.jpg" alt="50% scale Formula Student wind-tunnel test">
     </div>
   </div>
@@ -42,59 +42,50 @@
   <div class="wrap">
     <h2>Overview</h2>
     <div class="body">
-      <p>As Head of Computational Fluid Dynamics for Southampton University Formula Student, I supported the development and validation of the team's aerodynamic simulation methodology against experimental wind-tunnel data.</p>
-      <p>A 50% scale vehicle was tested across a range of operating conditions using force-balance measurements, surface pressure tappings and flow visualisation. The resulting data was used to assess the accuracy of the CFD model and identify areas for further development.</p>
+      <p>As part of the Southampton University Formula Student Team, I supported the setup and operations of our wind tunnel testing. Data from this experiment was subsequently used in a validation study of the team's CFD setup.</p>
     </div>
   </div>
 </section>
 
 <section class="detail-section">
   <div class="wrap">
-    <h2>What I Did</h2>
+    <h2>Methodology</h2>
     <div class="body" style="margin-bottom:36px;">
-      <p>Worked across both the experimental and computational sides of the campaign, establishing comparable conditions between the wind tunnel and CFD simulations.</p>
+      <p>I worked across both the experimental and computational sides of the campaign, establishing comparable conditions between the wind tunnel and CFD simulations.</p>
     </div>
 
     <div class="story">
 
       <div class="story-block reverse">
         <div class="story-media fit-content">
-          <img src="../images/fs-wind-tunnel-setup.jpg" alt="Formula Student wind-tunnel setup">
+          <img src="../images/WT/wt-side.png" alt="Formula Student wind-tunnel setup">
         </div>
         <div class="story-text">
           <p><b>Wind-Tunnel Testing</b></p>
-          <ul>
-            <li>Supported the setup and operation of a 50% scale vehicle in the wind tunnel.</li>
-            <li>Collected aerodynamic force data alongside surface pressure measurements and flow visualisation.</li>
-            <li>Controlled test conditions to provide repeatable data for CFD comparison.</li>
-          </ul>
+          <p>A total of 24 pressure tappings were distributed across the aerodynamic components for static pressure readings.</p>
+          <p>The spine was attached directly to the moment and force balance which allowed for easy measurements and control of yaw and rake angles.</p>
         </div>
       </div>
 
       <div class="story-block">
-        <div class="story-media">
-          <img src="../images/fs-cfd-mesh.jpg" alt="Formula Student CFD mesh">
+        <div class="story-media fit-content">
+          <img src="../images/WT/flow-vis-side.png" alt="Flow-vis end-plate view.">
         </div>
         <div class="story-text">
-          <p><b>CFD Methodology</b></p>
-          <ul>
-            <li>Developed and refined the STAR-CCM+ vehicle model using mesh and domain convergence studies.</li>
-            <li>Compared turbulence models to assess their influence on predicted aerodynamic forces and flow structures.</li>
-            <li>Matched CFD boundary conditions and vehicle configuration to the experimental test case.</li>
-          </ul>
+          <p>As well as the balance and pressure readings, we used tufts to visualise vortex shedding on the rear wing and fluorescent 'flow-vis' paint to identify flow patterns and mimic line integral convolution oil flow diagrams.</p>
+          <p>A rolling road and boundary layer suction device were used to accurately simulate real boundary layer conditions.</p>
+          <p>Rotating wheels were attached to individual load cells to measure their drag contribution.</p>
         </div>
       </div>
 
       <div class="story-block reverse">
-        <div class="story-media fit-content">
-          <img src="../images/WT/flow-vis-side.png" alt="Formula Student experimental flow visualisation">
+        <div class="story-media">
+          <img src="../images/fs-cfd-mesh.jpg" alt="Formula Student CFD mesh">
         </div>
         <div class="story-text">
-          <p><b>Flow Analysis</b></p>
-          <ul>
-            <li>Used pressure measurements and flow visualisation to investigate key aerodynamic features and regions of flow separation.</li>
-            <li>Compared experimental observations against CFD pressure and velocity fields to assess whether the simulation reproduced the underlying flow behaviour.</li>
-          </ul>
+          <p><b>CFD Setup</b></p>
+          <p>The CFD boundary conditions and turbulence parameters were carefully calibrated to replicate the physical environment of the R.J. Mitchell wind tunnel.</p>
+          <p>The computational geometry was scaled to match the 50% physical model. From there, an iterative meshing approach was used to resolve local sensitivities, systematically reducing discrepancies with the experimental data to improve overall correlation.</p>
         </div>
       </div>
 
@@ -117,22 +108,24 @@
         </div>
         <div class="story-text">
           <p><b>Aerodynamic Force Correlation</b></p>
-          <ul>
-            <li>Compared CFD predictions against wind-tunnel balance measurements across the tested operating conditions.</li>
-            <li>Achieved force-coefficient agreement within <b>1%</b> between simulation and experiment.</li>
-            <li>Used the correlation to assess the suitability of the CFD methodology for future aerodynamic development.</li>
-          </ul>
         </div>
       </div>
 
       <div class="story-block">
-        <div class="story-media two-up">
+        <div class="story-media">
           <img src="../images/fs-pressure-correlation.jpg" alt="CFD and experimental pressure correlation">
-          <img src="../images/fs-cfd-experiment.jpg" alt="Comparison between CFD and experimental flow">
         </div>
         <div class="story-text">
-          <p><b>Pressure &amp; Flow Correlation</b></p>
-          <p>Surface pressure measurements and flow visualisation provided additional insight into the sources of agreement and disagreement between CFD and experiment, helping distinguish modelling limitations from measurement uncertainty.</p>
+          <p><b>Pressure Tapping Correlation</b></p>
+        </div>
+      </div>
+
+      <div class="story-block reverse">
+        <div class="story-media">
+          <img src="../images/fs-force-correlation.jpg" alt="CFD and experimental force correlation">
+        </div>
+        <div class="story-text">
+          <p><b>Qualitative Correlation</b></p>
         </div>
       </div>
 
