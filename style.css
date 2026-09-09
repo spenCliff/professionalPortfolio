@@ -265,6 +265,13 @@ header.site{
 .story-block.reverse > .story-media{ order:2; }
 .story-block.reverse > .story-text{ order:1; }
 
+.story-block:has(.story-media.wide-media) {
+  grid-template-columns: 4fr 1fr;
+}
+.story-block.reverse:has(.story-media.wide-media) {
+  grid-template-columns: 1fr 4fr;
+}
+
 /* Text-only blocks (no <img> in the markup at all) stretch full width.
    Blocks that DO have an image keep the two-column layout, even if
    that image hasn't been uploaded yet. */
